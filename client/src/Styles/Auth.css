@@ -83,19 +83,3 @@
   text-decoration: underline;
 }
 
-.btn {
-  width: 100%;
-  background: #27ae60;
-  color: white;
-  padding: 1rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.btn:hover {
-  background: #219a52;
-}

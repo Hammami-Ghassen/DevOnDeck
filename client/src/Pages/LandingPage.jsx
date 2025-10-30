@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../Styles/Home.css';
+import '../Styles/Landing.css';
 
 const Home = () => {
   return (
-    <div className="home">
+    <div className="landing">
       <section className="hero">
         <h1>🚀 DevOnDeck</h1>
         <p> CONNECT . BUILD . LAUNCH </p>
