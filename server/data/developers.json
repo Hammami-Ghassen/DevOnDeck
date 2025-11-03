@@ -1,0 +1,79 @@
+{
+  "developers": [
+    {
+      "name": "Iyed ben cheikh ahmed",
+      "email": "iyedbencheikh@gmail.com",
+      "password": "Password123!",
+      "role": "developer",
+      "bio": "Développeur Full Stack passionnée par React et Node.js",
+      "skills": ["JavaScript", "React", "Node.js", "MongoDB", "Express"],
+      "frameworks": ["Next.js", "Redux"],
+      "avatar": "",
+      "localisation": "Tunis, Tunisia",
+      "contact": {
+        "mail": "iyedbencheikh@gmail.com",
+        "numero": "+21650000001"
+      }
+    },
+    {
+      "name": "Habib hafaiedh",
+      "email": "habib@gmail.com",
+      "password": "Password123!",
+      "role": "developer",
+      "bio": "Développeur Mobile spécialisé en Flutter et React Native",
+      "skills": ["Dart", "Flutter", "React Native", "TypeScript", "Firebase"],
+      "frameworks": ["Riverpod", "GetX", "Redux"],
+      "avatar": "",
+      "localisation": "Sfax, Tunisia",
+      "contact": {
+        "mail": "habib@gmail.com",
+        "numero": "+21650000002"
+      }
+    },
+    {
+      "name": "Iheb khemiri",
+      "email": "iheb@gmail.com",
+      "password": "Password123!",
+      "role": "developer",
+      "bio": "Développeur Full Stack spécialisée en Angular et .NET",
+      "skills": ["TypeScript", "Angular", "SQL Server"],
+      "frameworks": ["RxJS", "NgRx", "Entity Framework"],
+      "avatar": "",
+      "localisation": "Ariana, Tunisia",
+      "contact": {
+        "mail": "iheb@gmail.com",
+        "numero": "+21650000003"
+      }
+    },
+    {
+      "name": "Bylel khyari",
+      "email": "bylel@gmail.com",
+      "password": "Password123!",
+      "role": "developer",
+      "bio": "Développeur Frontend passionné par les interfaces modernes",
+      "skills": ["JavaScript", "Vue.js", "CSS3", "HTML5", "Sass"],
+      "frameworks": ["Nuxt.js", "Vuetify", "Pinia"],
+      "avatar": "",
+      "localisation": "Sousse, Tunisia",
+      "contact": {
+        "mail": "bylel@gmail.com",
+        "numero": "+21650000004"
+      }
+    },
+    {
+      "name": "Ghassen hammemi",
+      "email": "ghassend@gmail.com",
+      "password": "Password123!",
+      "role": "developer",
+      "bio": "Développeur Backend avec expertise en microservices",
+      "skills": ["Python", "Django", "PostgreSQL", "Docker", "Kubernetes"],
+      "frameworks": ["FastAPI", "Celery", "Redis"],
+      "avatar": "",
+      "localisation": "Tunis, Tunisia",
+      "contact": {
+        "mail": "ghassend@gmail.com",
+        "numero": "+21650000005"
+      }
+    }
+  ]
+}

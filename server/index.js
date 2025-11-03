@@ -1,22 +1,33 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
+import express from 'express';
+import dotenv from 'dotenv';
+import connectDB from './config/db.js';
+import adminRoutes from './routes/adminRoutes.js';
+import cors from 'cors';
 
-dotenv.config(); // load .env variables
+// server/index.js
+
+dotenv.config();
+
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-
-// Middlewares
 app.use(cors());
+
+// Middleware
 app.use(express.json());
 
-// Simple test route
-app.get('/', (req, res) => {
-  res.send('Server is running 🚀');
-});
+// Health check
+app.get('/', (_req, res) => res.send('API running'));
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
-});
+// Mount admin routes
+app.use('/admin', adminRoutes);
+
+const PORT = process.env.PORT || 5000;
+
+const start = async () => {
+  await connectDB();
+  app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
+  });
+};
+
+start();
