@@ -1,24 +1,21 @@
 import React from 'react';
-import '../Styles/Header.css';
+import styles from '../Styles/Header.module.css';
 
 const Header = () => {
   return (
-    <header className="header">
-      <div className="header-content">
-        <div className="header-left">
-          {/* Logo image */}
-          <img 
-            src="logo1a.png" 
-            alt="DevOnDeck Logo" 
-            className="logo-image"
-          />
+    <header className={styles.header}>
+      <div className={styles.headerContent}>
+        <div className={styles.headerLeft}>
+          <div className={styles.logo}>
+            👨‍💻
+          </div>
           <div>
-            <h1>DevOnDeck Admin</h1>
-            <p className="header-subtitle">Gestion des développeurs</p>
+            <h1>DevOnDeck</h1>
+            <p className={styles.headerSubtitle}>Plateforme de gestion des développeurs</p>
           </div>
         </div>
-        <div className="admin-badge">
-          👤 Administrateur
+        <div className={styles.adminBadge}>
+          👑 Admin
         </div>
       </div>
     </header>

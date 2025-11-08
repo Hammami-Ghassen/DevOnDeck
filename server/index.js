@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import adminRoutes from './routes/adminRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import authRoutes from './routes/authRoutes.js'; 
 import cors from 'cors';
 
 // server/index.js
@@ -22,14 +23,15 @@ app.get('/', (_req, res) => res.send('API running'));
 // Mount admin routes
 app.use('/admin', adminRoutes);
 app.use('/users', userRoutes);
+app.use('/auth', authRoutes); 
 
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 const start = async () => {
   await connectDB();
   app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
+    console.log(`✅ Server listening on http://localhost:${PORT}`);
   });
 };
 

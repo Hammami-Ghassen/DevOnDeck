@@ -1,7 +1,7 @@
 // scripts/checkDevelopers.js
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import User from '../models/userModel.js'; // <-- include .js extension
+import User from '../models/userModel.js';
 
 dotenv.config();
 
@@ -11,7 +11,7 @@ async function checkDevelopers() {
     await mongoose.connect(mongoUri);
     console.log('✅ Connected to MongoDB');
 
-    // Query all developers
+    // Query all developers (including password hashes)
     const developers = await User.find({ role: 'developer' }).sort({ createdAt: -1 });
 
     if (developers.length === 0) {
@@ -19,7 +19,12 @@ async function checkDevelopers() {
     } else {
       console.log(`Found ${developers.length} developers:\n`);
       developers.forEach((dev, index) => {
-        console.log(`${index + 1}. ${dev.name} | ${dev.email} | ${dev.localisation}`);
+        console.log(`${index + 1}. ${dev.name}`);
+        console.log(`   Email: ${dev.email}`);
+        console.log(`   Location: ${dev.localisation}`);
+        console.log(`   ID: ${dev._id}`);
+        console.log(`   Password Hash: ${dev.password}`);
+        console.log('');
       });
     }
   } catch (err) {
@@ -30,5 +35,4 @@ async function checkDevelopers() {
   }
 }
 
-// Run the script
 checkDevelopers();

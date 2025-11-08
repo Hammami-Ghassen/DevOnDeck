@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import '../Styles/Modal.css';
+import styles from '../Styles/Modal.module.css';
 
 const EditDeveloperModal = ({ developer, onClose, onSave }) => {
-  // États pour chaque champ du formulaire
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -11,7 +10,6 @@ const EditDeveloperModal = ({ developer, onClose, onSave }) => {
     frameworks: ''
   });
 
-  // Remplir le formulaire avec les données existantes
   useEffect(() => {
     if (developer) {
       setFormData({
@@ -24,7 +22,6 @@ const EditDeveloperModal = ({ developer, onClose, onSave }) => {
     }
   }, [developer]);
 
-  // Gérer les changements dans les champs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -33,11 +30,9 @@ const EditDeveloperModal = ({ developer, onClose, onSave }) => {
     }));
   };
 
-  // Soumettre le formulaire
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Transformer les chaînes de compétences en tableaux
     const updatedDeveloper = {
       ...developer,
       name: formData.name,
@@ -50,25 +45,24 @@ const EditDeveloperModal = ({ developer, onClose, onSave }) => {
     onSave(updatedDeveloper);
   };
 
-  // Fermer la modale si on clique en dehors
   const handleOverlayClick = (e) => {
-    if (e.target.className === 'modal-overlay') {
+    if (e.target.className.includes('modalOverlay')) {
       onClose();
     }
   };
 
   return (
-    <div className="modal-overlay" onClick={handleOverlayClick}>
-      <div className="modal-content">
-        <div className="modal-header">
+    <div className={styles.modalOverlay} onClick={handleOverlayClick}>
+      <div className={styles.modalContent}>
+        <div className={styles.modalHeader}>
           <h2>✏️ Modifier le développeur</h2>
-          <button className="close-btn" onClick={onClose}>
+          <button className={styles.closeBtn} onClick={onClose}>
             ×
           </button>
         </div>
 
-        <form className="modal-form" onSubmit={handleSubmit}>
-          <div className="form-group">
+        <form className={styles.modalForm} onSubmit={handleSubmit}>
+          <div className={styles.formGroup}>
             <label htmlFor="name">Nom complet</label>
             <input
               type="text"
@@ -80,7 +74,7 @@ const EditDeveloperModal = ({ developer, onClose, onSave }) => {
             />
           </div>
 
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label htmlFor="email">Email</label>
             <input
               type="email"
@@ -92,7 +86,7 @@ const EditDeveloperModal = ({ developer, onClose, onSave }) => {
             />
           </div>
 
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label htmlFor="bio">Biographie</label>
             <textarea
               id="bio"
@@ -103,7 +97,7 @@ const EditDeveloperModal = ({ developer, onClose, onSave }) => {
             />
           </div>
 
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label htmlFor="skills">Compétences principales</label>
             <input
               type="text"
@@ -111,15 +105,15 @@ const EditDeveloperModal = ({ developer, onClose, onSave }) => {
               name="skills"
               value={formData.skills}
               onChange={handleChange}
-              className="skills-input"
+              className={styles.skillsInput}
               required
             />
-            <span className="skills-help">
+            <span className={styles.skillsHelp}>
               Séparez les compétences par des virgules (ex: JavaScript, React, Node.js)
             </span>
           </div>
 
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label htmlFor="frameworks">Frameworks & Librairies</label>
             <input
               type="text"
@@ -129,14 +123,14 @@ const EditDeveloperModal = ({ developer, onClose, onSave }) => {
               onChange={handleChange}
               required
             />
-            <span className="frameworks-help">
+            <span className={styles.skillsHelp}>
               Séparez les frameworks par des virgules (ex: Express, Django)
             </span>
           </div>
 
-          <div className="modal-footer">
-            <button type="submit" className="save-btn">Enregistrer</button>
-            <button type="button" className="cancel-btn" onClick={onClose}>Annuler</button>
+          <div className={styles.modalFooter}>
+            <button type="submit" className={styles.saveBtn}>Enregistrer</button>
+            <button type="button" className={styles.cancelBtn} onClick={onClose}>Annuler</button>
           </div>
         </form>
       </div>

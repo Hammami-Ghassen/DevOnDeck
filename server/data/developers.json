@@ -3,7 +3,7 @@
     {
       "name": "Iyed ben cheikh ahmed",
       "email": "iyedbencheikh@gmail.com",
-      "password": "Password123!",
+      "password": "$2b$10$PCSSum71s.H74x5CRrsom.CkjwVzNWX.fv7q4xV/m5bnvsPeeNjPm",
       "role": "developer",
       "bio": "Développeur Full Stack passionnée par React et Node.js",
       "skills": ["JavaScript", "React", "Node.js", "MongoDB", "Express"],
@@ -18,7 +18,7 @@
     {
       "name": "Habib hafaiedh",
       "email": "habib@gmail.com",
-      "password": "Password123!",
+      "password": "$2b$10$PCSSum71s.H74x5CRrsom.CkjwVzNWX.fv7q4xV/m5bnvsPeeNjPm",
       "role": "developer",
       "bio": "Développeur Mobile spécialisé en Flutter et React Native",
       "skills": ["Dart", "Flutter", "React Native", "TypeScript", "Firebase"],
@@ -33,7 +33,7 @@
     {
       "name": "Iheb khemiri",
       "email": "iheb@gmail.com",
-      "password": "Password123!",
+      "password": "$2b$10$PCSSum71s.H74x5CRrsom.CkjwVzNWX.fv7q4xV/m5bnvsPeeNjPm",
       "role": "developer",
       "bio": "Développeur Full Stack spécialisée en Angular et .NET",
       "skills": ["TypeScript", "Angular", "SQL Server"],
@@ -48,7 +48,7 @@
     {
       "name": "Bylel khyari",
       "email": "bylel@gmail.com",
-      "password": "Password123!",
+      "password": "$2b$10$PCSSum71s.H74x5CRrsom.CkjwVzNWX.fv7q4xV/m5bnvsPeeNjPm",
       "role": "developer",
       "bio": "Développeur Frontend passionné par les interfaces modernes",
       "skills": ["JavaScript", "Vue.js", "CSS3", "HTML5", "Sass"],
@@ -62,9 +62,9 @@
     },
     {
       "name": "Ghassen hammemi",
-      "email": "ghassend@gmail.com",
-      "password": "Password123!",
-      "role": "developer",
+      "email": "ghassen@gmail.com",
+      "password": "$2b$10$PCSSum71s.H74x5CRrsom.CkjwVzNWX.fv7q4xV/m5bnvsPeeNjPm",
+      "role": "admin",
       "bio": "Développeur Backend avec expertise en microservices",
       "skills": ["Python", "Django", "PostgreSQL", "Docker", "Kubernetes"],
       "frameworks": ["FastAPI", "Celery", "Redis"],

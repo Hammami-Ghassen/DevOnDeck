@@ -1,26 +1,48 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import DeveloperList from '../components/DeveloperList';
 import EditDeveloperModal from '../components/EditDeveloperModal';
 import DeleteConfirmModal from '../components/DeleteConfirmModal';
-import '../Styles/Dashboard.css';
+import styles from '../Styles/Dashboard.module.css';
 
-// Base URL for the API (fallback to localhost:5000)
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
-// Fetch helpers replacing ../api module
+// Helper to get auth headers
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('token');
+  return {
+    'Content-Type': 'application/json',
+    'Authorization': token ? `Bearer ${token}` : ''
+  };
+};
+
 async function getDevelopers() {
+  const token = localStorage.getItem('token');
   const res = await fetch(`${API_URL}/admin/developers`, {
     method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
   });
-  if (!res.ok) throw new Error((await res.json().catch(() => ({}))).message || 'Failed to fetch developers');
+  if (!res.ok) {
+    if (res.status === 401) {
+      // Token invalid or expired
+      throw new Error('UNAUTHORIZED');
+    }
+    throw new Error((await res.json().catch(() => ({}))).message || 'Failed to fetch developers');
+  }
   return res.json();
 }
 
 async function updateDeveloper(id, updates) {
+  const token = localStorage.getItem('token');
   const res = await fetch(`${API_URL}/admin/developers/${id}`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
     body: JSON.stringify(updates),
   });
   if (!res.ok) throw new Error((await res.json().catch(() => ({}))).message || 'Failed to update developer');
@@ -28,14 +50,19 @@ async function updateDeveloper(id, updates) {
 }
 
 async function deleteDeveloper(id) {
+  const token = localStorage.getItem('token');
   const res = await fetch(`${API_URL}/admin/developers/${id}`, {
     method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
   });
   if (!res.ok) throw new Error((await res.json().catch(() => ({}))).message || 'Failed to delete developer');
   return res.json();
 }
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
   const [developers, setDevelopers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -44,8 +71,22 @@ const AdminDashboard = () => {
   const [notification, setNotification] = useState(null);
 
   useEffect(() => {
+    // Check if user is authenticated and is admin
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const token = localStorage.getItem('token');
+
+    if (!token || !user._id) {
+      navigate('/login');
+      return;
+    }
+
+    if (user.role !== 'admin') {
+      navigate('/'); // Not admin, redirect to home
+      return;
+    }
+
     loadDevelopers();
-  }, []);
+  }, [navigate]);
 
   const loadDevelopers = async () => {
     try {
@@ -54,6 +95,12 @@ const AdminDashboard = () => {
       setDevelopers(data);
       setError(null);
     } catch (err) {
+      if (err.message === 'UNAUTHORIZED') {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/login');
+        return;
+      }
       setError("Impossible de charger les développeurs. Assurez-vous que l'API Express tourne sur le port 5000.");
       console.error('Erreur de chargement:', err);
     } finally {
@@ -91,7 +138,7 @@ const AdminDashboard = () => {
   const confirmDelete = async () => {
     try {
       await deleteDeveloper(deletingDeveloper._id);
-      setDevelopers((prev) => prev.filter((d) => String(d._id) !==String(deletingDeveloper._id)));
+      setDevelopers((prev) => prev.filter((d) => String(d._id) !== String(deletingDeveloper._id)));
       setDeletingDeveloper(null);
       showNotification('✓ Développeur supprimé avec succès !');
     } catch (err) {
@@ -104,20 +151,20 @@ const AdminDashboard = () => {
     <div className="app-container">
       <Header />
       
-      <main className="dashboard">
-        <div className="dashboard-header">
-          <h2 className="dashboard-title">Tableau de bord</h2>
-          <p className="dashboard-subtitle">
+      <main className={styles.dashboard}>
+        <div className={styles.dashboardHeader}>
+          <h2 className={styles.dashboardTitle}>Tableau de bord</h2>
+          <p className={styles.dashboardSubtitle}>
             Gérez tous les développeurs inscrits sur la plateforme
           </p>
         </div>
 
-        <div className="stats-container">
-          <div className="stat-card">
-            <div className="stat-icon developers">
+        <div className={styles.statsContainer}>
+          <div className={styles.statCard}>
+            <div className={`${styles.statIcon} ${styles.developers}`}>
               👨‍💻
             </div>
-            <div className="stat-info">
+            <div className={styles.statInfo}>
               <h3>{developers.length}</h3>
               <p>Développeurs actifs</p>
             </div>
@@ -125,13 +172,13 @@ const AdminDashboard = () => {
         </div>
 
         {loading && (
-          <div className="loading">
+          <div className={styles.loading}>
             ⏳ Chargement des développeurs...
           </div>
         )}
         
         {error && (
-          <div className="error-message">
+          <div className={styles.errorMessage}>
             {error}
           </div>
         )}

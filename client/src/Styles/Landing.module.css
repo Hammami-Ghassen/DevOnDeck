@@ -6,7 +6,6 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #2c3e50;
   text-align: center;
-  
 }
 
 .hero {
@@ -29,7 +28,7 @@
   opacity: 0.9;
 }
 
-.cta-buttons {
+.ctaButtons {
   display: flex;
   gap: 1.5rem;
   justify-content: center;
@@ -37,7 +36,6 @@
 }
 
 .btn {
-  width: 100%;
   padding: 1rem 2.5rem;
   text-decoration: none;
   border-radius: 50px;
@@ -48,22 +46,23 @@
   cursor: pointer;
 }
 
-.btn-primary {
+.btnPrimary {
   background: #3498db;
   color: white;
 }
 
-.btn-primary:hover {
+.btnPrimary:hover {
   background: #2980b9;
   transform: translateY(-2px);
 }
 
-.btn-secondary {
-  color:  #764ba2;
-  border-color:  #764ba2;;
+.btnSecondary {
+  color: #764ba2;
+  border-color: #764ba2;
+  background: white;
 }
 
-.btn-secondary:hover {
-  
+.btnSecondary:hover {
+  background: #f8f9fa;
   transform: translateY(-2px);
 }

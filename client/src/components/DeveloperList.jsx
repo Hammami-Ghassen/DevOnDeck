@@ -1,21 +1,13 @@
 import React from 'react';
 import DeveloperCard from './DeveloperCard';
-import '../Styles/DeveloperCard.css';
+import styles from '../Styles/DeveloperCard.module.css';
 
 const DeveloperList = ({ developers, onEdit, onDelete }) => {
-  if (developers.length === 0) {
-    return (
-      <div className="loading">
-        Aucun développeur trouvé.
-      </div>
-    );
-  }
-
   return (
-    <div className="developer-list">
+    <div className={styles.developerList}>
       {developers.map((developer) => (
         <DeveloperCard
-          key={developer.id}
+          key={developer._id}
           developer={developer}
           onEdit={onEdit}
           onDelete={onDelete}

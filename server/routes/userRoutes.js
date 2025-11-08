@@ -7,6 +7,6 @@ const router = express.Router();
 router.get("/:id", getDeveloperById);
 
 // PUT mise à jour développeur
-router.put("/:id", updateDeveloper);
+router.put("/:id", protect, updateDeveloper);
 
 export default router;
