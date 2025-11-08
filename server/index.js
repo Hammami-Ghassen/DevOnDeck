@@ -2,8 +2,6 @@ import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import adminRoutes from './routes/adminRoutes.js';
-import userRoutes from './routes/userRoutes.js';
-
 import cors from 'cors';
 
 // server/index.js
@@ -22,7 +20,6 @@ app.get('/', (_req, res) => res.send('API running'));
 
 // Mount admin routes
 app.use('/admin', adminRoutes);
-app.use('/users', userRoutes);
 
 const PORT = process.env.PORT || 5000;
 
