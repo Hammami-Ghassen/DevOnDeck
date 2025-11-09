@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "../utils/axios";
 import styles from "../Styles/DeveloperProfile.module.css";
 
 const DeveloperProfile = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [developer, setDeveloper] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -14,19 +15,22 @@ const DeveloperProfile = () => {
 
   useEffect(() => {
     const fetchDeveloper = async () => {
-      console.log('Fetching developer with ID:', id);
       try {
-        const res = await axios.get(`http://localhost:5000/users/${id}`);
+        const res = await axios.get(`/users/${id}`);
         setDeveloper(res.data);
       } catch (err) {
         console.error(err);
-        setError("Erreur lors du chargement du profil.");
+        if (err.response?.status === 401) {
+          navigate('/login');
+        } else {
+          setError("Erreur lors du chargement du profil.");
+        }
       } finally {
         setLoading(false);
       }
     };
     if (id) fetchDeveloper();
-  }, [id]);
+  }, [id, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,14 +51,34 @@ const DeveloperProfile = () => {
     setError("");
     setSuccess("");
     try {
-      await axios.put(`http://localhost:5000/users/${id}`, developer);
+      await axios.put(`/users/${id}`, developer);
       setSuccess("Profil mis à jour avec succès !");
       setIsEditing(false);
     } catch (err) {
       console.error(err);
-      setError("Erreur lors de la mise à jour du profil.");
+      if (err.response?.status === 401) {
+        navigate('/login');
+      } else {
+        setError("Erreur lors de la mise à jour du profil.");
+      }
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await axios.post('/auth/logout');
+      
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('user');
+      
+      navigate('/login');
+    } catch (err) {
+      console.error('Logout error:', err);
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('user');
+      navigate('/login');
     }
   };
 
@@ -82,6 +106,15 @@ const DeveloperProfile = () => {
           </div>
           <p className={styles.profileSubtitle}>{developer.bio || "Bio courte..."}</p>
         </div>
+        
+        {/* Logout button in header */}
+        <button 
+          onClick={handleLogout}
+          className={styles.logoutBtn}
+          title="Déconnexion"
+        >
+          🚪 Déconnexion
+        </button>
       </div>
 
       <form className={styles.profileForm} onSubmit={handleSubmit}>

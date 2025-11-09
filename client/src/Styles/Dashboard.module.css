@@ -9,6 +9,10 @@
 
 .dashboardHeader {
   margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
 }
 
 .dashboardTitle {
@@ -21,6 +25,29 @@
 .dashboardSubtitle {
   color: #7f8c8d;
   font-size: 16px;
+}
+
+.logoutBtn {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.logoutBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+}
+
+.logoutBtn:active {
+  transform: translateY(0);
 }
 
 .statsContainer {
@@ -87,12 +114,21 @@
   margin: 20px 0;
 }
 
-@media (max-width: 680px) {
+@media (max-width: 768px) {
   .dashboard {
     padding: 20px;
   }
   
+  .dashboardHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
   .dashboardTitle {
     font-size: 24px;
+  }
+
+  .logoutBtn {
+    width: 100%;
   }
 }

@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../utils/axios';
 import styles from '../Styles/Auth.module.css';
-
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,31 +9,55 @@ const Login = () => {
     email: '',
     password: ''
   });
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState({
+    email: '',
+    password: '',
+    general: ''
+  });
   const [loading, setLoading] = useState(false);
+
+  const validateForm = () => {
+    const newErrors = { email: '', password: '', general: '' };
+    let isValid = true;
+
+    if (!formData.email) {
+      newErrors.email = 'Email requis';
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Email invalide';
+      isValid = false;
+    }
+
+    if (!formData.password) {
+      newErrors.password = 'Mot de passe requis';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setErrors({ email: '', password: '', general: '' });
+
+    if (!validateForm()) {
+      return;
+    }
+
     setLoading(true);
-    console.log(formData.email)
-    console.log(formData.password)
 
     try {
-      const response = await axios.post(`${API_URL}/auth/login`, {
+      const response = await axios.post('/auth/login', {
         email: formData.email,
         password: formData.password
       });
 
       console.log('✅ Login successful:', response.data);
 
-      // Store token and user in localStorage
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-      }
+      localStorage.setItem('accessToken', response.data.accessToken);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
 
-      // Redirect based on user role
       const { role, _id } = response.data.user;
       
       if (role === 'admin') {
@@ -50,10 +72,10 @@ const Login = () => {
 
     } catch (err) {
       console.error('❌ Login error:', err);
-      setError(
-        err.response?.data?.message || 
-        'Erreur lors de la connexion. Veuillez vérifier vos identifiants.'
-      );
+      setErrors({
+        ...errors,
+        general: err.response?.data?.message || 'Erreur lors de la connexion. Veuillez vérifier vos identifiants.'
+      });
     } finally {
       setLoading(false);
     }
@@ -64,33 +86,53 @@ const Login = () => {
       <div className={styles.authCard}>
         <h2>🔐 Connexion</h2>
         
-        {error && (
+        {errors.general && (
           <div className={styles.errorMessage}>
-            {error}
+            {errors.general}
           </div>
         )}
 
         <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
+            <label className={errors.email ? styles.errorLabel : ''}>
+              Email
+            </label>
+            {errors.email && (
+              <span className={styles.fieldError}>{errors.email}</span>
+            )}
             <input
               type="email"
               placeholder="Email"
               value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
-              required
+              onChange={(e) => {
+                setFormData({...formData, email: e.target.value});
+                setErrors({...errors, email: ''});
+              }}
+              className={errors.email ? styles.errorInput : ''}
               disabled={loading}
             />
           </div>
+
           <div className={styles.formGroup}>
+            <label className={errors.password ? styles.errorLabel : ''}>
+              Mot de passe
+            </label>
+            {errors.password && (
+              <span className={styles.fieldError}>{errors.password}</span>
+            )}
             <input
               type="password"
               placeholder="Mot de passe"
               value={formData.password}
-              onChange={(e) => setFormData({...formData, password: e.target.value})}
-              required
+              onChange={(e) => {
+                setFormData({...formData, password: e.target.value});
+                setErrors({...errors, password: ''});
+              }}
+              className={errors.password ? styles.errorInput : ''}
               disabled={loading}
             />
           </div>
+
           <button 
             type="submit" 
             className={styles.btnPrimary}

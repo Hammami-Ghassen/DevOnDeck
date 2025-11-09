@@ -27,6 +27,19 @@ const userSchema = new mongoose.Schema(
         enum: ["developer", "admin","organization"],
         default: "developer",
       },
+
+      // 🔄 Refresh tokens array (allow multiple devices)
+      refreshTokens: [{
+        token: {
+          type: String,
+          required: true
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+          expires: 604800 // 7 days in seconds
+        }
+      }],
   
       // 👤 Developer profile information
       bio: {
@@ -45,11 +58,10 @@ const userSchema = new mongoose.Schema(
       },
   
       avatar: {
-        type: String, // URL of profile picture
+        type: String,
         default: "",
       },
   
-      // 🌍 New fields
       localisation: {
         type: String,
         default: "",

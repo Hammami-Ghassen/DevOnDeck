@@ -1,6 +1,6 @@
 import express from "express";
 import { getDeveloperById , updateDeveloper} from "../controllers/userController.js";
-
+import {protect} from '../middleware/authMiddleware.js';
 const router = express.Router();
 
 // GET développeur par id

@@ -12,7 +12,7 @@ async function checkDevelopers() {
     console.log('✅ Connected to MongoDB');
 
     // Query all developers (including password hashes)
-    const developers = await User.find({ role: 'developer' }).sort({ createdAt: -1 });
+    const developers = await User.find({ role: ['developer','admin'] }).sort({ createdAt: -1 });
 
     if (developers.length === 0) {
       console.log('No developers found in the database.');

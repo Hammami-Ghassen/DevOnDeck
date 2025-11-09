@@ -16,6 +16,7 @@
   display: flex;
   align-items: center;
   gap: 24px;
+  position: relative;
 }
 
 .avatarPreview {
@@ -43,6 +44,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 6px;
+  flex: 1;
 }
 
 .profileTitle {
@@ -69,6 +71,30 @@
 
 .editIcon:hover {
   transform: scale(1.2);
+}
+
+/* Logout button styles */
+.logoutBtn {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+.logoutBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+}
+
+.logoutBtn:active {
+  transform: translateY(0);
 }
 
 .profileForm {
@@ -181,5 +207,11 @@
 
   .profileTitle {
     font-size: 22px;
+  }
+
+  .logoutBtn {
+    margin-left: 0;
+    margin-top: 10px;
+    width: 100%;
   }
 }

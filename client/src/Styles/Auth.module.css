@@ -70,6 +70,30 @@
 
 .formGroup {
   margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 6px;
+  transition: color 0.3s ease;
+}
+
+/* Red label when error */
+.formGroup label.errorLabel {
+  color: #e74c3c;
+}
+
+/* Field error message */
+.fieldError {
+  display: block;
+  color: #e74c3c;
+  font-size: 12px;
+  margin-bottom: 4px;
+  font-weight: 500;
 }
 
 .formGroup input {
@@ -78,13 +102,24 @@
   border: 2px solid #ecf0f1;
   border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.3s ease;
+  transition: all 0.3s ease;
   box-sizing: border-box;
 }
 
 .formGroup input:focus {
   outline: none;
   border-color: #3498db;
+}
+
+/* Error state input */
+.formGroup input.errorInput {
+  border-color: #e74c3c;
+  background-color: #fff5f5;
+}
+
+.formGroup input.errorInput:focus {
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
 }
 
 .formGroup input:disabled {
@@ -147,4 +182,3 @@
     padding: 0.75rem;
   }
 }
-

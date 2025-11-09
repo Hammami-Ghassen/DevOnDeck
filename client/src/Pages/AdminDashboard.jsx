@@ -1,64 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from '../utils/axios';
 import Header from '../components/Header';
 import DeveloperList from '../components/DeveloperList';
 import EditDeveloperModal from '../components/EditDeveloperModal';
 import DeleteConfirmModal from '../components/DeleteConfirmModal';
 import styles from '../Styles/Dashboard.module.css';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-
-// Helper to get auth headers
-const getAuthHeaders = () => {
-  const token = localStorage.getItem('token');
-  return {
-    'Content-Type': 'application/json',
-    'Authorization': token ? `Bearer ${token}` : ''
-  };
-};
-
 async function getDevelopers() {
-  const token = localStorage.getItem('token');
-  const res = await fetch(`${API_URL}/admin/developers`, {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  });
-  if (!res.ok) {
-    if (res.status === 401) {
-      // Token invalid or expired
-      throw new Error('UNAUTHORIZED');
-    }
-    throw new Error((await res.json().catch(() => ({}))).message || 'Failed to fetch developers');
-  }
-  return res.json();
+  const response = await axios.get('/admin/developers');
+  return response.data;
 }
 
 async function updateDeveloper(id, updates) {
-  const token = localStorage.getItem('token');
-  const res = await fetch(`${API_URL}/admin/developers/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify(updates),
-  });
-  if (!res.ok) throw new Error((await res.json().catch(() => ({}))).message || 'Failed to update developer');
-  return res.json();
+  const response = await axios.put(`/admin/developers/${id}`, updates);
+  return response.data;
 }
 
 async function deleteDeveloper(id) {
-  const token = localStorage.getItem('token');
-  const res = await fetch(`${API_URL}/admin/developers/${id}`, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  });
-  if (!res.ok) throw new Error((await res.json().catch(() => ({}))).message || 'Failed to delete developer');
-  return res.json();
+  const response = await axios.delete(`/admin/developers/${id}`);
+  return response.data;
 }
 
 const AdminDashboard = () => {
@@ -71,17 +32,16 @@ const AdminDashboard = () => {
   const [notification, setNotification] = useState(null);
 
   useEffect(() => {
-    // Check if user is authenticated and is admin
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const token = localStorage.getItem('token');
+    const accessToken = localStorage.getItem('accessToken');
 
-    if (!token || !user._id) {
+    if (!accessToken || !user._id) {
       navigate('/login');
       return;
     }
 
     if (user.role !== 'admin') {
-      navigate('/'); // Not admin, redirect to home
+      navigate('/');
       return;
     }
 
@@ -95,13 +55,13 @@ const AdminDashboard = () => {
       setDevelopers(data);
       setError(null);
     } catch (err) {
-      if (err.message === 'UNAUTHORIZED') {
-        localStorage.removeItem('token');
+      if (err.response?.status === 401) {
+        localStorage.removeItem('accessToken');
         localStorage.removeItem('user');
         navigate('/login');
         return;
       }
-      setError("Impossible de charger les développeurs. Assurez-vous que l'API Express tourne sur le port 5000.");
+      setError("Impossible de charger les développeurs.");
       console.error('Erreur de chargement:', err);
     } finally {
       setLoading(false);
@@ -147,16 +107,43 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await axios.post('/auth/logout');
+      
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('user');
+      
+      navigate('/login');
+    } catch (err) {
+      console.error('Logout error:', err);
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('user');
+      navigate('/login');
+    }
+  };
+
   return (
     <div className="app-container">
       <Header />
       
       <main className={styles.dashboard}>
         <div className={styles.dashboardHeader}>
-          <h2 className={styles.dashboardTitle}>Tableau de bord</h2>
-          <p className={styles.dashboardSubtitle}>
-            Gérez tous les développeurs inscrits sur la plateforme
-          </p>
+          <div>
+            <h2 className={styles.dashboardTitle}>Tableau de bord</h2>
+            <p className={styles.dashboardSubtitle}>
+              Gérez tous les développeurs inscrits sur la plateforme
+            </p>
+          </div>
+          
+          {/* Logout button */}
+          <button 
+            onClick={handleLogout}
+            className={styles.logoutBtn}
+            title="Déconnexion"
+          >
+            🚪 Déconnexion
+          </button>
         </div>
 
         <div className={styles.statsContainer}>
