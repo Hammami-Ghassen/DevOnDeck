@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../utils/axios';
 import Header from '../components/Header';
@@ -22,25 +22,6 @@ async function deleteDeveloper(id) {
   return response.data;
 }
 
-const loadDevelopers = async () => {
-  try {
-    setLoading(true);
-    const data = await getDevelopers();
-    setDevelopers(data);
-    setError(null);
-  } catch (err) {
-    if (err.response?.status === 401) {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('user');
-      navigate('/login');
-      return;
-    }
-    setError("Impossible de charger les développeurs.");
-    console.error('Erreur de chargement:', err);
-  } finally {
-    setLoading(false);
-  }
-};
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [developers, setDevelopers] = useState([]);
@@ -49,6 +30,26 @@ const AdminDashboard = () => {
   const [editingDeveloper, setEditingDeveloper] = useState(null);
   const [deletingDeveloper, setDeletingDeveloper] = useState(null);
   const [notification, setNotification] = useState(null);
+
+  const loadDevelopers = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await getDevelopers();
+      setDevelopers(data);
+      setError(null);
+    } catch (err) {
+      if (err.response?.status === 401) {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('user');
+        navigate('/login');
+        return;
+      }
+      setError("Impossible de charger les développeurs.");
+      console.error('Erreur de chargement:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -65,8 +66,7 @@ const AdminDashboard = () => {
     }
 
     loadDevelopers();
-  }, [navigate]);
-
+  }, [navigate, loadDevelopers]);
 
   const showNotification = (message, type = 'success') => {
     setNotification({ message, type });
@@ -136,7 +136,6 @@ const AdminDashboard = () => {
             </p>
           </div>
           
-          {/* Logout button */}
           <button 
             onClick={handleLogout}
             className={styles.logoutBtn}
