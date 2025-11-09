@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from '../utils/axios';
+import axios from '../utils/axios';  // ✅ Now safe to use!
 import styles from '../Styles/Auth.module.css';
 
 const Login = () => {
