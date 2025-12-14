@@ -1,0 +1,124 @@
+{
+  "offers": [
+    {
+      "organizationId": "org123",
+      "title": "Développeur Full Stack React/Node.js",
+      "description": "Nous recherchons un développeur Full Stack expérimenté pour rejoindre notre équipe. Vous travaillerez sur des projets innovants utilisant React et Node.js.",
+      "requiredSkills": ["JavaScript", "React", "Node.js", "MongoDB"],
+      "requiredFrameworks": ["Next.js", "Express"],
+      "preferredLocalisation": "Tunis",
+      "experienceLevel": "intermediate",
+      "contractType": "CDI",
+      "salary": {
+        "min": 2000,
+        "max": 3500
+      },
+      "status": "active"
+    },
+    {
+      "organizationId": "org123",
+      "title": "Développeur Mobile Flutter",
+      "description": "Rejoignez notre équipe mobile pour créer des applications performantes avec Flutter. Expérience en Firebase requise.",
+      "requiredSkills": ["Dart", "Flutter", "Firebase"],
+      "requiredFrameworks": ["Riverpod", "GetX"],
+      "preferredLocalisation": "Sfax",
+      "experienceLevel": "senior",
+      "contractType": "CDI",
+      "salary": {
+        "min": 2500,
+        "max": 4000
+      },
+      "status": "active"
+    },
+    {
+      "organizationId": "org456",
+      "title": "Développeur Frontend Vue.js",
+      "description": "Nous cherchons un développeur Frontend passionné pour créer des interfaces utilisateur modernes et réactives avec Vue.js et Nuxt.js.",
+      "requiredSkills": ["JavaScript", "Vue.js", "CSS3", "HTML5"],
+      "requiredFrameworks": ["Nuxt.js", "Vuetify"],
+      "preferredLocalisation": "Sousse",
+      "experienceLevel": "intermediate",
+      "contractType": "freelance",
+      "salary": {
+        "min": 50,
+        "max": 80
+      },
+      "status": "active"
+    },
+    {
+      "organizationId": "org456",
+      "title": "Développeur Backend Python/Django",
+      "description": "Développeur Backend pour architecture microservices. Expertise en Django, Docker et Kubernetes nécessaire.",
+      "requiredSkills": ["Python", "Django", "PostgreSQL", "Docker"],
+      "requiredFrameworks": ["FastAPI", "Celery"],
+      "preferredLocalisation": "Tunis",
+      "experienceLevel": "senior",
+      "contractType": "CDI",
+      "salary": {
+        "min": 3000,
+        "max": 5000
+      },
+      "status": "active"
+    },
+    {
+      "organizationId": "org789",
+      "title": "Développeur Angular/.NET",
+      "description": "Poste pour développeur Full Stack avec une forte expérience en Angular et .NET. Vous travaillerez sur des applications d'entreprise complexes.",
+      "requiredSkills": ["TypeScript", "Angular", "SQL Server"],
+      "requiredFrameworks": ["RxJS", "NgRx"],
+      "preferredLocalisation": "Ariana",
+      "experienceLevel": "expert",
+      "contractType": "CDD",
+      "salary": {
+        "min": 2800,
+        "max": 4200
+      },
+      "status": "active"
+    },
+    {
+      "organizationId": "org789",
+      "title": "Développeur React Native",
+      "description": "Créez des applications mobiles cross-platform avec React Native. Mission de 6 mois renouvelable.",
+      "requiredSkills": ["TypeScript", "React Native", "Firebase"],
+      "requiredFrameworks": ["Redux"],
+      "preferredLocalisation": "Tunisia",
+      "experienceLevel": "intermediate",
+      "contractType": "freelance",
+      "salary": {
+        "min": 60,
+        "max": 100
+      },
+      "status": "active"
+    },
+    {
+      "organizationId": "org123",
+      "title": "Stage Développement Web",
+      "description": "Stage de 6 mois pour étudiant en développement web. Formation sur React, Node.js et MongoDB.",
+      "requiredSkills": ["JavaScript", "HTML5", "CSS3"],
+      "requiredFrameworks": ["React"],
+      "preferredLocalisation": "Tunis",
+      "experienceLevel": "junior",
+      "contractType": "stage",
+      "salary": {
+        "min": 300,
+        "max": 500
+      },
+      "status": "active"
+    },
+    {
+      "organizationId": "org456",
+      "title": "Lead Developer Full Stack",
+      "description": "Position de leadership technique pour un développeur expérimenté. Gestion d'équipe et architecture système.",
+      "requiredSkills": ["JavaScript", "Python", "Docker", "Kubernetes"],
+      "requiredFrameworks": ["Next.js", "FastAPI"],
+      "preferredLocalisation": "Tunis",
+      "experienceLevel": "expert",
+      "contractType": "CDI",
+      "salary": {
+        "min": 5000,
+        "max": 7000
+      },
+      "status": "active"
+    }
+  ]
+}

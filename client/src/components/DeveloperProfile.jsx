@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "../Styles/DeveloperProfile.css";
+import "../Styles/DeveloperProfile.module.css";
 
 const DeveloperProfile = ({ userId }) => {
   const [developer, setDeveloper] = useState(null);
