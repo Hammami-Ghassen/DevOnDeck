@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "../utils/axios";
 import styles from "../Styles/DeveloperProfile.module.css";
+import EditDeveloperModal from "../components/EditDeveloperModal";
 
 const DeveloperProfile = () => {
   const { id } = useParams();
@@ -13,29 +14,26 @@ const DeveloperProfile = () => {
   const [success, setSuccess] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [canEdit, setCanEdit] = useState(false);
+  const [activeTab, setActiveTab] = useState("profile");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleError = (err, action = 'loading') => {
+  const handleError = useCallback((err, action = 'loading') => {
     console.error(`Error during ${action}:`, err);
     
     if (err.response?.status === 401) {
-      // 401 - Not authenticated
       localStorage.removeItem('accessToken');
       localStorage.removeItem('user');
       navigate('/login');
     } else if (err.response?.status === 403) {
-      // 403 - Forbidden
       navigate('/forbidden');
     } else if (err.response?.status === 404) {
-      // 404 - Not found
       setError(err.response?.data?.message || "Profil non trouvé");
     } else if (err.response?.status >= 500) {
-      // 500+ - Server error
       setError("Erreur serveur. Veuillez réessayer plus tard.");
     } else {
-      // Other errors
       setError(err.response?.data?.message || "Une erreur est survenue");
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
     const fetchDeveloper = async () => {
@@ -43,7 +41,6 @@ const DeveloperProfile = () => {
         const res = await axios.get(`/users/${id}`);
         setDeveloper(res.data);
         
-        // Check if current user can edit this profile
         const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
         const canEditProfile = 
           currentUser._id === id || 
@@ -57,7 +54,7 @@ const DeveloperProfile = () => {
       }
     };
     if (id) fetchDeveloper();
-  }, [id]);
+  }, [id, handleError]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -90,6 +87,24 @@ const DeveloperProfile = () => {
     }
   };
 
+  const handleModalSave = async (updatedDeveloper) => {
+    setSaving(true);
+    setError("");
+    setSuccess("");
+    
+    try {
+      await axios.put(`/users/${id}`, updatedDeveloper);
+      setDeveloper(updatedDeveloper);
+      setSuccess("Profil mis à jour avec succès !");
+      setIsModalOpen(false);
+      setTimeout(() => setSuccess(""), 3000);
+    } catch (err) {
+      handleError(err, 'updating');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleLogout = async () => {
     try {
       await axios.post('/auth/logout');
@@ -105,7 +120,7 @@ const DeveloperProfile = () => {
   };
 
   const toggleEdit = () => {
-    setIsEditing(!isEditing);
+    setIsModalOpen(true);
     setError("");
     setSuccess("");
   };
@@ -133,14 +148,14 @@ const DeveloperProfile = () => {
   }
 
   return (
-    <div className={styles.profileContainer}>
-      <div className={styles.profileCard}>
-        {/* Header with Avatar and Actions */}
-        <div className={styles.profileHeader}>
+    <div className={styles.fullWidthContainer}>
+      {/* Fixed Header with Avatar and Name */}
+      <div className={styles.profileHeader}>
+        <div className={styles.headerContent}>
           <div className={styles.avatarSection}>
-            <div className={styles.avatarPreview}>
+            <div className={styles.avatarWrapper}>
               {developer?.avatar ? (
-                <img src={developer.avatar} alt={developer.name} />
+                <img src={developer.avatar} alt={developer.name} className={styles.avatar} />
               ) : (
                 <div className={styles.avatarPlaceholder}>
                   {developer?.name?.charAt(0)?.toUpperCase() || "?"}
@@ -148,242 +163,157 @@ const DeveloperProfile = () => {
               )}
             </div>
             <div className={styles.headerInfo}>
-              <h1 className={styles.profileTitle}>{developer?.name || "Nom du développeur"}</h1>
-              <p className={styles.profileRole}>👨‍💻 {developer?.role === 'developer' ? 'Développeur' : 'Utilisateur'}</p>
-              {developer?.localisation && (
-                <p className={styles.profileLocation}>📍 {developer.localisation}</p>
-              )}
+              <h1 className={styles.userName}>{developer?.name || "Nom du développeur"}</h1>
+              <p className={styles.userRole}>👨‍💻 {developer?.role === 'developer' ? 'Développeur' : 'Utilisateur'}</p>
             </div>
           </div>
 
           <div className={styles.headerActions}>
-            {/* Only show edit button if user can edit */}
             {canEdit && (
-              <button 
-                onClick={toggleEdit}
-                className={`${styles.btn} ${styles.btnEdit}`}
-                title={isEditing ? "Annuler" : "Modifier le profil"}
-              >
-                {isEditing ? "❌ Annuler" : "✏️ Modifier"}
+              <button onClick={toggleEdit} className={styles.editBtn}>
+                ✏️ Modifier
               </button>
             )}
-            
-            {/* Show logout button if user is logged in */}
             {localStorage.getItem('accessToken') && (
-              <button 
-                onClick={handleLogout}
-                className={`${styles.btn} ${styles.btnLogout}`}
-                title="Déconnexion"
-              >
+              <button onClick={handleLogout} className={styles.logoutBtn}>
                 🚪 Déconnexion
               </button>
             )}
           </div>
         </div>
+      </div>
 
-        {/* Success/Error Messages */}
-        {success && (
-          <div className={styles.alertSuccess}>
-            ✓ {success}
-          </div>
-        )}
-
-        {error && (
-          <div className={styles.alertError}>
-            ✗ {error}
-          </div>
-        )}
-
-        {/* Bio Section */}
-        <div className={styles.bioSection}>
-          <h3 className={styles.sectionTitle}>📝 À propos</h3>
-          <div className={styles.sectionContent}>
-            {isEditing ? (
-              <textarea
-                name="bio"
-                value={developer?.bio || ""}
-                onChange={handleChange}
-                placeholder="Décrivez votre parcours, vos passions..."
-                className={styles.textarea}
-                rows="4"
-              />
-            ) : (
-              <p className={styles.bioText}>
-                {developer?.bio || "Aucune biographie disponible"}
-              </p>
-            )}
-          </div>
+      {/* Tabs Navigation */}
+      <div className={styles.tabsBar}>
+        <div className={styles.tabsWrapper}>
+          <button
+            className={`${styles.tabButton} ${activeTab === 'profile' ? styles.activeTab : ''}`}
+            onClick={() => setActiveTab('profile')}
+          >
+            👤 Informations
+          </button>
+          <button
+            className={`${styles.tabButton} ${activeTab === 'applications' ? styles.activeTab : ''}`}
+            onClick={() => setActiveTab('applications')}
+          >
+            📋 Candidatures
+          </button>
         </div>
+      </div>
 
-        {/* Skills Section */}
-        <div className={styles.section}>
-          <h3 className={styles.sectionTitle}>💻 Compétences</h3>
-          <div className={styles.sectionContent}>
-            {isEditing ? (
-              <div>
-                <input
-                  name="skills"
-                  value={developer?.skills ? developer.skills.join(", ") : ""}
-                  onChange={(e) =>
-                    setDeveloper({
-                      ...developer,
-                      skills: e.target.value.split(",").map((s) => s.trim()).filter(s => s),
-                    })
-                  }
-                  placeholder="JavaScript, React, Node.js..."
-                  className={styles.input}
-                />
-                <span className={styles.inputHint}>Séparez les compétences par des virgules</span>
+      {/* Messages */}
+      {success && (
+        <div className={styles.alertSuccess}>✓ {success}</div>
+      )}
+      {error && (
+        <div className={styles.alertError}>✗ {error}</div>
+      )}
+
+      {/* Tab Content */}
+      <div className={styles.contentWrapper}>
+        {activeTab === 'profile' && (
+          <div className={styles.tabContent}>
+            {/* Bio Section */}
+            <div className={styles.infoCard}>
+              <h3 className={styles.cardTitle}>📝 À propos</h3>
+              <div className={styles.cardContent}>
+                <p className={styles.bioText}>
+                  {developer?.bio || "Aucune biographie disponible"}
+                </p>
               </div>
-            ) : (
-              <div className={styles.skillsList}>
-                {developer?.skills && developer.skills.length > 0 ? (
-                  developer.skills.map((skill, index) => (
-                    <span key={index} className={styles.skillBadge}>
-                      {skill}
-                    </span>
-                  ))
-                ) : (
-                  <p className={styles.emptyState}>Aucune compétence ajoutée</p>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
+            </div>
 
-        {/* Frameworks Section */}
-        <div className={styles.section}>
-          <h3 className={styles.sectionTitle}>🔧 Frameworks & Outils</h3>
-          <div className={styles.sectionContent}>
-            {isEditing ? (
-              <div>
-                <input
-                  name="frameworks"
-                  value={developer?.frameworks ? developer.frameworks.join(", ") : ""}
-                  onChange={(e) =>
-                    setDeveloper({
-                      ...developer,
-                      frameworks: e.target.value.split(",").map((f) => f.trim()).filter(f => f),
-                    })
-                  }
-                  placeholder="Express, Django, Docker..."
-                  className={styles.input}
-                />
-                <span className={styles.inputHint}>Séparez les frameworks par des virgules</span>
-              </div>
-            ) : (
-              <div className={styles.frameworksList}>
-                {developer?.frameworks && developer.frameworks.length > 0 ? (
-                  developer.frameworks.map((framework, index) => (
-                    <span key={index} className={styles.frameworkBadge}>
-                      {framework}
-                    </span>
-                  ))
-                ) : (
-                  <p className={styles.emptyState}>Aucun framework ajouté</p>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Contact Information - Only show in edit mode or if can edit */}
-        {(isEditing || canEdit) && (
-          <form onSubmit={handleSubmit} className={styles.form}>
-            <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>📞 Informations de contact</h3>
-              <div className={styles.formGrid}>
-                <div className={styles.formGroup}>
-                  <label>Nom complet</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={developer?.name || ""}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    className={styles.input}
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label>Email principal</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={developer?.email || ""}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    className={styles.input}
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label>Email de contact</label>
-                  <input
-                    type="email"
-                    name="mail"
-                    value={developer?.contact?.mail || ""}
-                    onChange={handleContactChange}
-                    disabled={!isEditing}
-                    className={styles.input}
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label>Téléphone</label>
-                  <input
-                    type="tel"
-                    name="numero"
-                    value={developer?.contact?.numero || ""}
-                    onChange={handleContactChange}
-                    disabled={!isEditing}
-                    placeholder="+216 XX XXX XXX"
-                    className={styles.input}
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label>Localisation</label>
-                  <input
-                    type="text"
-                    name="localisation"
-                    value={developer?.localisation || ""}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    placeholder="Ville, Pays"
-                    className={styles.input}
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label>Avatar (URL)</label>
-                  <input
-                    type="url"
-                    name="avatar"
-                    value={developer?.avatar || ""}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    placeholder="https://..."
-                    className={styles.input}
-                  />
+            {/* Skills Section */}
+            <div className={styles.infoCard}>
+              <h3 className={styles.cardTitle}>💻 Compétences</h3>
+              <div className={styles.cardContent}>
+                <div className={styles.badgesList}>
+                  {developer?.skills && developer.skills.length > 0 ? (
+                    developer.skills.map((skill, index) => (
+                      <span key={index} className={styles.skillBadge}>
+                        {skill}
+                      </span>
+                    ))
+                  ) : (
+                    <p className={styles.emptyState}>Aucune compétence ajoutée</p>
+                  )}
                 </div>
               </div>
             </div>
 
-            {isEditing && (
-              <div className={styles.formActions}>
-                <button 
-                  type="submit" 
-                  className={`${styles.btn} ${styles.btnSave}`}
-                  disabled={saving}
-                >
-                  {saving ? "💾 Enregistrement..." : "💾 Enregistrer les modifications"}
-                </button>
+            {/* Frameworks Section */}
+            <div className={styles.infoCard}>
+              <h3 className={styles.cardTitle}>🔧 Frameworks & Outils</h3>
+              <div className={styles.cardContent}>
+                <div className={styles.badgesList}>
+                  {developer?.frameworks && developer.frameworks.length > 0 ? (
+                    developer.frameworks.map((framework, index) => (
+                      <span key={index} className={styles.frameworkBadge}>
+                        {framework}
+                      </span>
+                    ))
+                  ) : (
+                    <p className={styles.emptyState}>Aucun framework ajouté</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Contact Information */}
+            {canEdit && (
+              <div className={styles.infoCard}>
+                <h3 className={styles.cardTitle}>📞 Informations de contact</h3>
+                <div className={styles.infoGrid}>
+                  <div className={styles.infoRow}>
+                    <span className={styles.infoLabel}>Nom complet</span>
+                    <span className={styles.infoValue}>{developer?.name || "Non renseigné"}</span>
+                  </div>
+
+                  <div className={styles.infoRow}>
+                    <span className={styles.infoLabel}>Email principal</span>
+                    <span className={styles.infoValue}>{developer?.email || "Non renseigné"}</span>
+                  </div>
+
+                  <div className={styles.infoRow}>
+                    <span className={styles.infoLabel}>Email de contact</span>
+                    <span className={styles.infoValue}>{developer?.contact?.mail || "Non renseigné"}</span>
+                  </div>
+
+                  <div className={styles.infoRow}>
+                    <span className={styles.infoLabel}>Téléphone</span>
+                    <span className={styles.infoValue}>{developer?.contact?.numero || "Non renseigné"}</span>
+                  </div>
+
+                  <div className={styles.infoRow}>
+                    <span className={styles.infoLabel}>Localisation</span>
+                    <span className={styles.infoValue}>{developer?.localisation || "Non renseigné"}</span>
+                  </div>
+                </div>
               </div>
             )}
-          </form>
+          </div>
+        )}
+
+        {activeTab === 'applications' && (
+          <div className={styles.tabContent}>
+            <div className={styles.infoCard}>
+              <h3 className={styles.cardTitle}>📋 Mes Candidatures</h3>
+              <div className={styles.cardContent}>
+                <p className={styles.emptyState}>Aucune candidature pour le moment</p>
+              </div>
+            </div>
+          </div>
         )}
       </div>
+
+      {/* Edit Modal */}
+      {isModalOpen && (
+        <EditDeveloperModal
+          developer={developer}
+          onClose={() => setIsModalOpen(false)}
+          onSave={handleModalSave}
+        />
+      )}
     </div>
   );
 };

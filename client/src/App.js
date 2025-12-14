@@ -7,6 +7,7 @@ import Register from './Pages/Register.jsx';
 import AdminDashboard from './Pages/AdminDashboard.jsx';
 import DeveloperProfile from './Pages/DeveloperProfile.jsx';
 import Forbidden from './Pages/Forbidden.jsx';
+import Home from './Pages/Home.jsx';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<LandingPage />} />
+        <Route path="/Home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forbidden" element={<Forbidden />} />

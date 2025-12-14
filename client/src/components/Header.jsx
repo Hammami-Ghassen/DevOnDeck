@@ -14,9 +14,6 @@ const Header = () => {
             <p className={styles.headerSubtitle}>Plateforme de gestion des développeurs</p>
           </div>
         </div>
-        <div className={styles.adminBadge}>
-          👑 Admin
-        </div>
       </div>
     </header>
   );

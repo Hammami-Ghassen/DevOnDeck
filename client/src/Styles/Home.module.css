@@ -1,0 +1,324 @@
+.homeContainer {
+    flex: 1;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+  }
+  
+  .heroSection {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 4rem 2rem;
+    text-align: center;
+    color: white;
+  }
+  
+  .heroTitle {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  
+  .heroSubtitle {
+    font-size: 1.3rem;
+    opacity: 0.95;
+  }
+  
+  .searchSection {
+    max-width: 1200px;
+    margin: -2rem auto 2rem;
+    padding: 0 2rem;
+  }
+  
+  .searchBar {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .searchIcon {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+  }
+  
+  .searchInput {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 1.1rem;
+    color: #2c3e50;
+  }
+  
+  .searchInput::placeholder {
+    color: #95a5a6;
+  }
+  
+  .filtersRow {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .filterSelect,
+  .filterInput {
+    padding: 0.75rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .filterSelect {
+    flex: 1;
+    min-width: 150px;
+  }
+  
+  .filterInput {
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  .filterSelect:focus,
+  .filterInput:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+  
+  .clearBtn {
+    padding: 0.75rem 1.5rem;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+  
+  .clearBtn:hover {
+    background: #c0392b;
+    transform: translateY(-2px);
+  }
+  
+  .resultsCount {
+    max-width: 1200px;
+    margin: 0 auto 1.5rem;
+    padding: 0 2rem;
+    font-size: 1.1rem;
+    color: #7f8c8d;
+    font-weight: 500;
+  }
+  
+  .offersGrid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+  }
+  
+  .offerCard {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+  
+  .offerCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border-color: #667eea;
+  }
+  
+  .offerHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .offerTitle {
+    font-size: 1.3rem;
+    color: #2c3e50;
+    font-weight: 600;
+    margin: 0;
+    flex: 1;
+  }
+  
+  .contractBadge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  
+  .contractBadge.CDI {
+    background: #d4edda;
+    color: #155724;
+  }
+  
+  .contractBadge.CDD {
+    background: #fff3cd;
+    color: #856404;
+  }
+  
+  .contractBadge.freelance {
+    background: #d1ecf1;
+    color: #0c5460;
+  }
+  
+  .contractBadge.stage {
+    background: #e2e3e5;
+    color: #383d41;
+  }
+  
+  .offerCompany {
+    color: #7f8c8d;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+  }
+  
+  .offerDescription {
+    color: #5a6c7d;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  
+  .offerSkills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .skillTag {
+    background: #f0f2f5;
+    color: #667eea;
+    padding: 0.3rem 0.7rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  
+  .offerFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ecf0f1;
+  }
+  
+  .offerInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .infoItem {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+  }
+  
+  .offerSalary {
+    font-weight: 600;
+    color: #27ae60;
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+  
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    color: #7f8c8d;
+  }
+  
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .error {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background: #fee;
+    color: #c33;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .emptyState {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #7f8c8d;
+  }
+  
+  .emptyIcon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+  
+  .emptyState h3 {
+    font-size: 1.5rem;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+  }
+  
+  @media (max-width: 768px) {
+    .heroTitle {
+      font-size: 2rem;
+    }
+  
+    .heroSubtitle {
+      font-size: 1rem;
+    }
+  
+    .offersGrid {
+      grid-template-columns: 1fr;
+      padding: 0 1rem 2rem;
+    }
+  
+    .searchSection {
+      padding: 0 1rem;
+    }
+  
+    .filtersRow {
+      flex-direction: column;
+    }
+  
+    .filterSelect,
+    .filterInput {
+      width: 100%;
+    }
+  
+    .offerFooter {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
