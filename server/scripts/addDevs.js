@@ -6,11 +6,12 @@ import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import User from '../models/userModel.js'; // <-- IMPORTANT: include .js extension
 
-dotenv.config();
-
 // __dirname replacement for ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.join(__dirname, '..', '.env') });
+
 
 // path to JSON (project-root/data/developers.json)
 const jsonPath = path.join(__dirname, '..', 'data', 'developers.json');
@@ -31,7 +32,7 @@ async function run() {
       return;
     }
 
-    const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/mydb';
+    const mongoUri = process.env.MONGO_URI;
     await mongoose.connect(mongoUri, { keepAlive: true });
     console.log('✅ Connected to MongoDB');
 

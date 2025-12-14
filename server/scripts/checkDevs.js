@@ -7,7 +7,7 @@ dotenv.config();
 
 async function checkDevelopers() {
   try {
-    const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/mydb';
+    const mongoUri = process.env.MONGO_URI;
     await mongoose.connect(mongoUri);
     console.log('✅ Connected to MongoDB');
 

@@ -31,6 +31,38 @@ const AdminDashboard = () => {
   const [deletingDeveloper, setDeletingDeveloper] = useState(null);
   const [notification, setNotification] = useState(null);
 
+  const handleError = (err, action = 'loading') => {
+    console.error(`Error during ${action}:`, err);
+    
+    if (err.response?.status === 401) {
+      // 401 - Not authenticated
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('user');
+      navigate('/login');
+    } else if (err.response?.status === 403) {
+      // 403 - Forbidden (not admin)
+      navigate('/forbidden');
+    } else if (err.response?.status === 404) {
+      // 404 - Not found
+      setError(err.response?.data?.message || "Ressource non trouvée");
+      if (action !== 'loading') {
+        showNotification('✗ Ressource non trouvée', 'error');
+      }
+    } else if (err.response?.status >= 500) {
+      // 500 - Server error
+      setError("Erreur serveur. Veuillez réessayer plus tard.");
+      if (action !== 'loading') {
+        showNotification('✗ Erreur serveur', 'error');
+      }
+    } else {
+      // Other errors
+      setError(err.response?.data?.message || "Une erreur est survenue");
+      if (action !== 'loading') {
+        showNotification('✗ ' + (err.response?.data?.message || "Une erreur est survenue"), 'error');
+      }
+    }
+  };
+
   const loadDevelopers = useCallback(async () => {
     try {
       setLoading(true);
@@ -38,35 +70,16 @@ const AdminDashboard = () => {
       setDevelopers(data);
       setError(null);
     } catch (err) {
-      if (err.response?.status === 401) {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('user');
-        navigate('/login');
-        return;
-      }
-      setError("Impossible de charger les développeurs.");
-      console.error('Erreur de chargement:', err);
+      handleError(err, 'loading');
     } finally {
       setLoading(false);
     }
   }, [navigate]);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const accessToken = localStorage.getItem('accessToken');
-
-    if (!accessToken || !user._id) {
-      navigate('/login');
-      return;
-    }
-
-    if (user.role !== 'admin') {
-      navigate('/');
-      return;
-    }
-
+    // No frontend checks - let backend handle authentication and authorization
     loadDevelopers();
-  }, [navigate, loadDevelopers]);
+  }, [loadDevelopers]);
 
   const showNotification = (message, type = 'success') => {
     setNotification({ message, type });
@@ -86,8 +99,8 @@ const AdminDashboard = () => {
       setEditingDeveloper(null);
       showNotification('✓ Développeur modifié avec succès !');
     } catch (err) {
-      showNotification('✗ Erreur lors de la modification', 'error');
-      console.error('Erreur de modification:', err);
+      handleError(err, 'update');
+      setEditingDeveloper(null);
     }
   };
 
@@ -102,8 +115,8 @@ const AdminDashboard = () => {
       setDeletingDeveloper(null);
       showNotification('✓ Développeur supprimé avec succès !');
     } catch (err) {
-      showNotification('✗ Erreur lors de la suppression', 'error');
-      console.error('Erreur de suppression:', err);
+      handleError(err, 'delete');
+      setDeletingDeveloper(null);
     }
   };
 

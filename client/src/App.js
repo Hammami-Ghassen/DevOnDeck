@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import ProtectedRoute from './components/ProtectedRoute';
 
 import LandingPage from './Pages/LandingPage.jsx';
 import Login from './Pages/Login.jsx';
@@ -9,7 +8,7 @@ import AdminDashboard from './Pages/AdminDashboard.jsx';
 import DeveloperProfile from './Pages/DeveloperProfile.jsx';
 import Forbidden from './Pages/Forbidden.jsx';
 
-function Test() {
+function App() {
   return (
     <Router>
       <Routes>
@@ -19,25 +18,9 @@ function Test() {
         <Route path="/register" element={<Register />} />
         <Route path="/forbidden" element={<Forbidden />} />
         
-        {/* Protected: Developer profile */}
-        <Route 
-          path="/developer/:id" 
-          element={
-            <ProtectedRoute requiredRole="developer">
-              <DeveloperProfile />
-            </ProtectedRoute>
-          } 
-        />
-        
-        {/* Protected: Admin dashboard */}
-        <Route 
-          path="/admin/dashboard" 
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <AdminDashboard />
-            </ProtectedRoute>
-          } 
-        />
+        {/* All routes - backend controls access */}
+        <Route path="/developer/:id" element={<DeveloperProfile />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
         
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" />} />
@@ -46,4 +29,4 @@ function Test() {
   );
 }
 
-export default Test;
+export default App;
