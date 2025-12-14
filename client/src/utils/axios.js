@@ -25,7 +25,7 @@ const processQueue = (error, token = null) => {
       prom.resolve(token);
     }
   });
-  
+
   failedQueue = [];
 };
 
@@ -33,7 +33,7 @@ const processQueue = (error, token = null) => {
 axiosInstance.interceptors.request.use(
   (config) => {
     // Don't add token to login/register/refresh requests
-    const isAuthEndpoint = 
+    const isAuthEndpoint =
       config.url?.includes('/auth/login') ||
       config.url?.includes('/auth/register') ||
       config.url?.includes('/auth/refresh');
@@ -44,7 +44,7 @@ axiosInstance.interceptors.request.use(
         config.headers.Authorization = `Bearer ${accessToken}`;
       }
     }
-    
+
     return config;
   },
   (error) => Promise.reject(error)
@@ -61,7 +61,7 @@ axiosInstance.interceptors.response.use(
     // 2. Not a 401 error
     // 3. Already retried
     // 4. Request is to auth endpoints
-    const isAuthEndpoint = 
+    const isAuthEndpoint =
       originalRequest.url?.includes('/auth/login') ||
       originalRequest.url?.includes('/auth/register') ||
       originalRequest.url?.includes('/auth/refresh') ||
@@ -108,19 +108,25 @@ axiosInstance.interceptors.response.use(
 
     } catch (refreshError) {
       processQueue(refreshError, null);
-      
+
       localStorage.removeItem('accessToken');
       localStorage.removeItem('user');
-      
+
       if (!window.location.pathname.includes('/login')) {
         window.location.href = '/login';
       }
-      
+
       return Promise.reject(refreshError);
     } finally {
       isRefreshing = false;
     }
   }
 );
+
+
+export const organizationAPI = {
+  getOffers: () => axiosInstance.get('/organization/offers'),
+  getSearches: () => axiosInstance.get('/organization/searches')
+};
 
 export default axiosInstance;

@@ -14,7 +14,7 @@ const app = express();
 
 // CORS configuration - allow credentials (cookies)
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:5173', process.env.CLIENT_URL],
   credentials: true
 }));
 
