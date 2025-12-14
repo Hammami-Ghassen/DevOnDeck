@@ -6,7 +6,11 @@ import connectDB from './config/db.js';
 import adminRoutes from './routes/adminRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+<<<<<<< Updated upstream
 import searchRoutes from './routes/searchRoutes.js';
+=======
+import devRoutes from './routes/devRoutes.js';
+>>>>>>> Stashed changes
 
 dotenv.config();
 
@@ -29,7 +33,11 @@ app.get('/', (_req, res) => res.send('API running'));
 app.use('/admin', adminRoutes);
 app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
+<<<<<<< Updated upstream
 app.use('/organization', searchRoutes);
+=======
+app.use('/developers', devRoutes);
+>>>>>>> Stashed changes
 
 const PORT = process.env.PORT || 5000;
 

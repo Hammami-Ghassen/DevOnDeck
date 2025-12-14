@@ -52,7 +52,7 @@
       "role": "developer",
       "bio": "Développeur Frontend passionné par les interfaces modernes",
       "skills": ["JavaScript", "Vue.js", "CSS3", "HTML5", "Sass"],
-      "frameworks": ["Nuxt.js", "Vuetify", "Pinia"],
+      "frameworks": ["Next.js", "Vuetify", "Pinia"],
       "avatar": "",
       "localisation": "Sousse, Tunisia",
       "contact": {

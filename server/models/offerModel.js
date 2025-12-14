@@ -54,6 +54,12 @@ const offerSchema = new mongoose.Schema({
     enum: ["active", "closed", "draft"],
     default: "active",
   },
+  applicants: [
+    {
+      type: mongoose.Schema.Types.ObjectId, // liste d’ids de développeurs
+      ref: "User",
+    },
+  ],
 }, { timestamps: true });
 
 export default mongoose.model("Offer", offerSchema);
