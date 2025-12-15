@@ -9,6 +9,8 @@ import DeveloperProfile from './Pages/DeveloperProfile.jsx';
 import Forbidden from './Pages/Forbidden.jsx';
 import Home from './Pages/Home.jsx';
 import CreateOffer from './Pages/CreateOffer.jsx';
+import OrganizationDashboard from "./Pages/OrganizationDashboard.jsx"
+import OfferDetails from './Pages/offerDetails.jsx';
 
 function App() {
   return (
@@ -20,11 +22,13 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forbidden" element={<Forbidden />} />
+        <Route path="/offers/:id" element={<OfferDetails />} />
         
         {/* All routes - backend controls access */}
         <Route path="/developer/:id" element={<DeveloperProfile />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/organization/create-offer" element={<CreateOffer />} />
+        <Route path="/organization/dashboard" element={<OrganizationDashboard />} />
         
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" />} />

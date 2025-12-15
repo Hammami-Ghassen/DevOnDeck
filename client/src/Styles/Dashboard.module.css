@@ -28,6 +28,9 @@
 }
 
 .logoutBtn {
+  margin-left: auto;
+  margin-right: 20px;
+  margin-top: 20px;
   padding: 12px 24px;
   background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
   color: white;
@@ -39,6 +42,7 @@
   transition: all 0.3s ease;
   white-space: nowrap;
   flex-shrink: 0;
+  display: block;
 }
 
 .logoutBtn:hover {

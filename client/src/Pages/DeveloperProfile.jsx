@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "../utils/axios";
 import styles from "../Styles/DeveloperProfile.module.css";
 import EditDeveloperModal from "../components/EditDeveloperModal";
+import DeveloperApplications from "../components/DeveloperApplications";
 
 const DeveloperProfile = () => {
   const { id } = useParams();
@@ -296,12 +297,7 @@ const DeveloperProfile = () => {
 
         {activeTab === 'applications' && (
           <div className={styles.tabContent}>
-            <div className={styles.infoCard}>
-              <h3 className={styles.cardTitle}>📋 Mes Candidatures</h3>
-              <div className={styles.cardContent}>
-                <p className={styles.emptyState}>Aucune candidature pour le moment</p>
-              </div>
-            </div>
+            <DeveloperApplications />
           </div>
         )}
       </div>

@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import axios from '../utils/axios';
 import Header from '../components/Header';
 import DeveloperList from '../components/DeveloperList';
+import OrganizationList from '../components/OrganizationList';
 import EditDeveloperModal from '../components/EditDeveloperModal';
 import DeleteConfirmModal from '../components/DeleteConfirmModal';
 import styles from '../Styles/Dashboard.module.css';
 
-async function getDevelopers() {
-  const response = await axios.get('/admin/developers');
+async function getUsers() {
+  const response = await axios.get('/admin/users');
   return response.data;
 }
 
@@ -25,192 +26,143 @@ async function deleteDeveloper(id) {
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [developers, setDevelopers] = useState([]);
+  const [organizations, setOrganizations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editingDeveloper, setEditingDeveloper] = useState(null);
   const [deletingDeveloper, setDeletingDeveloper] = useState(null);
-  const [notification, setNotification] = useState(null);
-
-  const handleError = (err, action = 'loading') => {
-    console.error(`Error during ${action}:`, err);
-    
-    if (err.response?.status === 401) {
-      // 401 - Not authenticated
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('user');
-      navigate('/login');
-    } else if (err.response?.status === 403) {
-      // 403 - Forbidden (not admin)
-      navigate('/forbidden');
-    } else if (err.response?.status === 404) {
-      // 404 - Not found
-      setError(err.response?.data?.message || "Ressource non trouvée");
-      if (action !== 'loading') {
-        showNotification('✗ Ressource non trouvée', 'error');
-      }
-    } else if (err.response?.status >= 500) {
-      // 500 - Server error
-      setError("Erreur serveur. Veuillez réessayer plus tard.");
-      if (action !== 'loading') {
-        showNotification('✗ Erreur serveur', 'error');
-      }
-    } else {
-      // Other errors
-      setError(err.response?.data?.message || "Une erreur est survenue");
-      if (action !== 'loading') {
-        showNotification('✗ ' + (err.response?.data?.message || "Une erreur est survenue"), 'error');
-      }
-    }
-  };
-
-  const loadDevelopers = useCallback(async () => {
-    try {
-      setLoading(true);
-      const data = await getDevelopers();
-      setDevelopers(data);
-      setError(null);
-    } catch (err) {
-      handleError(err, 'loading');
-    } finally {
-      setLoading(false);
-    }
-  }, [navigate]);
 
   useEffect(() => {
-    // No frontend checks - let backend handle authentication and authorization
-    loadDevelopers();
-  }, [loadDevelopers]);
+    const fetchUsers = async () => {
+      try {
+        setLoading(true);
+        const users = await getUsers();
+        
+        // Separate by role
+        setDevelopers(users.filter(user => user.role === 'developer'));
+        setOrganizations(users.filter(user => user.role === 'organization'));
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchUsers();
+  }, []);
 
-  const showNotification = (message, type = 'success') => {
-    setNotification({ message, type });
-    setTimeout(() => {
-      setNotification(null);
-    }, 3000);
-  };
-
-  const handleEdit = (developer) => {
+  const handleEditDeveloper = useCallback((developer) => {
     setEditingDeveloper(developer);
-  };
+  }, []);
 
-  const handleSave = async (updatedDeveloper) => {
+  const handleDeleteDeveloper = useCallback((developer) => {
+    setDeletingDeveloper(developer);
+  }, []);
+
+  const handleSaveDeveloper = async (updates) => {
     try {
-      const updated = await updateDeveloper(updatedDeveloper._id, updatedDeveloper);
-      setDevelopers((prev) => prev.map((d) => (String(d._id) === String(updatedDeveloper._id) ? updated : d)));
+      await updateDeveloper(editingDeveloper._id, updates);
+      const users = await getUsers();
+      setDevelopers(users.filter(user => user.role === 'developer'));
+      setOrganizations(users.filter(user => user.role === 'organization'));
       setEditingDeveloper(null);
-      showNotification('✓ Développeur modifié avec succès !');
     } catch (err) {
-      handleError(err, 'update');
-      setEditingDeveloper(null);
+      setError(err.message);
     }
   };
 
-  const handleDelete = (developer) => {
-    setDeletingDeveloper(developer);
-  };
-
-  const confirmDelete = async () => {
+  const handleConfirmDelete = async () => {
     try {
       await deleteDeveloper(deletingDeveloper._id);
-      setDevelopers((prev) => prev.filter((d) => String(d._id) !== String(deletingDeveloper._id)));
+      const users = await getUsers();
+      setDevelopers(users.filter(user => user.role === 'developer'));
+      setOrganizations(users.filter(user => user.role === 'organization'));
       setDeletingDeveloper(null);
-      showNotification('✓ Développeur supprimé avec succès !');
     } catch (err) {
-      handleError(err, 'delete');
-      setDeletingDeveloper(null);
+      setError(err.message);
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await axios.post('/auth/logout');
-      
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('user');
-      
-      navigate('/login');
-    } catch (err) {
-      console.error('Logout error:', err);
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('user');
-      navigate('/login');
-    }
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
   };
 
-  return (
-    <div className="app-container">
-      <Header />
-      
-      <main className={styles.dashboard}>
+  if (loading) {
+    return (
+      <div className={styles.dashboard}>
         <div className={styles.dashboardHeader}>
           <div>
-            <h2 className={styles.dashboardTitle}>Tableau de bord</h2>
-            <p className={styles.dashboardSubtitle}>
-              Gérez tous les développeurs inscrits sur la plateforme
-            </p>
+            <h1 className={styles.dashboardTitle}>Admin Dashboard</h1>
+            <p className={styles.dashboardSubtitle}>Manage developers and organizations</p>
           </div>
-          
-          <button 
-            onClick={handleLogout}
-            className={styles.logoutBtn}
-            title="Déconnexion"
-          >
-            🚪 Déconnexion
+          <button onClick={handleLogout} className={styles.logoutBtn}>
+            Logout
           </button>
         </div>
+        <div className={styles.container}>
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
-        <div className={styles.statsContainer}>
-          <div className={styles.statCard}>
-            <div className={`${styles.statIcon} ${styles.developers}`}>
-              👨‍💻
-            </div>
-            <div className={styles.statInfo}>
-              <h3>{developers.length}</h3>
-              <p>Développeurs actifs</p>
-            </div>
-          </div>
+  if (error) {
+    return (
+      <div className={styles.dashboard}>
+        <Header onLogout={handleLogout} />
+        <div className={styles.container}>
+          <p className={styles.error}>Error: {error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.dashboard}>
+      <Header />
+      <button onClick={handleLogout} className={styles.logoutBtn}>
+        Logout
+      </button>
+      
+      <div className={styles.container}>
+        <h1>Admin Dashboard</h1>
+
+        {/* Developers Section */}
+        <div className={styles.section}>
+          <h2>Developers</h2>
+          <DeveloperList
+            developers={developers}
+            onEdit={handleEditDeveloper}
+            onDelete={handleDeleteDeveloper}
+          />
         </div>
 
-        {loading && (
-          <div className={styles.loading}>
-            ⏳ Chargement des développeurs...
-          </div>
-        )}
-        
-        {error && (
-          <div className={styles.errorMessage}>
-            {error}
-          </div>
-        )}
-        
-        {!loading && !error && (
-          <DeveloperList 
-            developers={developers}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
+        {/* Organizations Section */}
+        <div className={styles.section}>
+          <h2>Organizations</h2>
+          <OrganizationList 
+            organizations={organizations}
+            onEdit={null}
+            onDelete={null}
           />
-        )}
-      </main>
+        </div>
+      </div>
 
       {editingDeveloper && (
         <EditDeveloperModal
           developer={editingDeveloper}
+          onSave={handleSaveDeveloper}
           onClose={() => setEditingDeveloper(null)}
-          onSave={handleSave}
         />
       )}
 
       {deletingDeveloper && (
         <DeleteConfirmModal
           developer={deletingDeveloper}
+          onConfirm={handleConfirmDelete}
           onClose={() => setDeletingDeveloper(null)}
-          onConfirm={confirmDelete}
         />
-      )}
-
-      {notification && (
-        <div className={`notification ${notification.type}`}>
-          {notification.message}
-        </div>
       )}
     </div>
   );

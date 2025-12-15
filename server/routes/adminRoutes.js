@@ -6,8 +6,10 @@ const router = express.Router();
 
 router.use(protect, adminOnly);
 
-// GET /admin/developers
-router.get('/developers', adminController.getDevelopers);
+// GET /admin/users - Get all users (developers + organizations)
+router.get('/users', adminController.getUsers);
+
+
 
 // POST /admin/developers
 router.post('/developers', adminController.createDeveloper);

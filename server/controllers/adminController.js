@@ -7,13 +7,14 @@ import User from '../models/userModel.js';
  * GET /developers
  * Return list of all developers (optionally you may paginate/filter later)
  */
-export const getDevelopers = async (req, res) => {
+export const getUsers = async (req, res) => {
   try {
-    const developers = await User.find({ role: 'developer' }).sort({ createdAt: -1 });
-    return res.status(200).json(developers);
+    const users = await User.find({}).sort({ createdAt: -1 });
+
+    return res.status(200).json(users);
   } catch (err) {
-    console.error('Error fetching developers:', err);
-    return res.status(500).json({ message: 'Server error fetching developers' });
+    console.error('Error fetching users:', err);
+    return res.status(500).json({ message: 'Server error fetching users' });
   }
 };
 
