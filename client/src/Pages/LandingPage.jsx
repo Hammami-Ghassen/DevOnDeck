@@ -1,24 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../Styles/Landing.css';
+import styles from '../Styles/Landing.module.css';
 
-const Home = () => {
+const LandingPage = () => {
   return (
-    <div className="landing">
-      <section className="hero">
-        <h1>🚀 DevOnDeck</h1>
-        <p> CONNECT . BUILD . LAUNCH </p>
-        <div className="cta-buttons">
-          <Link to="/login" className="btn btn-primary">
+    <div className={styles.landing}>
+      <div className={styles.hero}>
+        <h1>👨‍💻 DevOnDeck</h1>
+        <p>
+          La plateforme qui met en relation les meilleurs développeurs 
+          avec les organisations qui ont besoin de leurs compétences
+        </p>
+        <div className={styles.ctaButtons}>
+          <Link to="/register" className={`${styles.btn} ${styles.btnPrimary}`}>
+            Commencer maintenant
+          </Link>
+          <Link to="/login" className={`${styles.btn} ${styles.btnSecondary}`}>
             Se connecter
           </Link>
-          <Link to="/register" className="btn btn-secondary">
-            S'inscrire
-          </Link>
         </div>
-      </section>
+      </div>
     </div>
   );
 };
 
-export default Home;
+export default LandingPage;

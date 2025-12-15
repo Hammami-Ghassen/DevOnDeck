@@ -1,0 +1,225 @@
+.offerDetails {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+  
+  .backButton {
+    background: none;
+    border: none;
+    color: #6366f1;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+  }
+  
+  .backButton:hover {
+    background-color: #f3f4f6;
+  }
+  
+  .offerContainer {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .offerHeader {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+  
+  .headerContent {
+    flex: 1;
+  }
+  
+  .offerTitle {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+  
+  .offerMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.95rem;
+    opacity: 0.95;
+  }
+  
+  .company, .location {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  
+  .contractBadge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .applyButton {
+    background: white;
+    color: #6366f1;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    white-space: nowrap;
+  }
+  
+  .applyButton:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .applyButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .offerContent {
+    padding: 2rem;
+  }
+  
+  .section {
+    margin-bottom: 2.5rem;
+  }
+  
+  .section:last-child {
+    margin-bottom: 0;
+  }
+  
+  .sectionTitle {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e5e7eb;
+  }
+  
+  .description {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #4b5563;
+  }
+  
+  .skillsGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+  
+  .skillTag, .frameworkTag {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .skillTag {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+  
+  .frameworkTag {
+    background: #f3e8ff;
+    color: #7c3aed;
+  }
+  
+  .detailsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .detailItem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .detailLabel {
+    font-size: 0.9rem;
+    color: #6b7280;
+    font-weight: 500;
+  }
+  
+  .detailValue {
+    font-size: 1.05rem;
+    color: #1f2937;
+    font-weight: 600;
+  }
+  
+  .offerFooter {
+    background: #f9fafb;
+    padding: 2rem;
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+  }
+  
+  .applyButtonLarge {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .applyButtonLarge:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+  }
+  
+  .applyButtonLarge:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .loading, .error {
+    text-align: center;
+    padding: 4rem 2rem;
+    font-size: 1.2rem;
+    color: #6b7280;
+  }
+  
+  .error {
+    color: #ef4444;
+  }
+  
+  @media (max-width: 768px) {
+    .offerHeader {
+      flex-direction: column;
+    }
+  
+    .offerTitle {
+      font-size: 1.5rem;
+    }
+  
+    .applyButton {
+      width: 100%;
+    }
+  
+    .detailsGrid {
+      grid-template-columns: 1fr;
+    }
+  }

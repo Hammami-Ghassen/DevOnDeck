@@ -5,7 +5,7 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.header-content {
+.headerContent {
   max-width: 1400px;
   margin: 0 auto;
   display: flex;
@@ -13,7 +13,7 @@
   justify-content: space-between;
 }
 
-.header-left {
+.headerLeft {
   display: flex;
   align-items: center;
   gap: 15px;
@@ -38,19 +38,33 @@
   font-weight: 600;
 }
 
-.header-subtitle {
+.headerSubtitle {
   font-size: 14px;
   opacity: 0.9;
   margin-top: 5px;
 }
 
-.admin-badge {
+.adminBadge {
   background-color: rgba(158, 165, 113, 0.864);
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 17px;
   font-weight: 700;
   backdrop-filter: blur(10px);
+}
+
+.logoImage {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  border-radius: 10px;
+  background-color: white;
+  padding: 2px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logoImage.round {
+  border-radius: 50%;
 }
 
 @media (max-width: 768px) {
@@ -62,23 +76,8 @@
     font-size: 22px;
   }
   
-  .header-content {
+  .headerContent {
     flex-direction: column;
     gap: 15px;
   }
-}
-/* Style pour le logo image */
-.logo-image {
-  width: 50px;
-  height: 50px;
-  object-fit: contain;
-  border-radius: 10px;
-  background-color: white;
-  padding: 2px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Alternative : logo rond */
-.logo-image.round {
-  border-radius: 50%;
 }

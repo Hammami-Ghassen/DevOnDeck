@@ -1,58 +1,58 @@
 import React from 'react';
-import '../Styles/DeveloperCard.css';
+import styles from '../Styles/DeveloperCard.module.css';
 
 const DeveloperCard = ({ developer, onEdit, onDelete }) => {
   return (
-    <div className="developer-card">
-      <div className="card-header">
-        <img 
-          src={developer.avatar} 
-          alt={developer.name}
-          className="developer-avatar"
-        />
-        <div className="developer-info">
+    <div className={styles.developerCard}>
+      <div className={styles.cardHeader}>
+        {developer.avatar && (
+          <img 
+            src={developer.avatar} 
+            alt={developer.name}
+            className={styles.developerAvatar}
+          />
+        )}
+        <div className={styles.developerInfo}>
           <h3>{developer.name}</h3>
-          <p className="developer-email">
-            ✉️ {developer.email}
-          </p>
+          <p className={styles.developerEmail}>✉️ {developer.email}</p>
         </div>
       </div>
 
-      <div className="developer-bio">
-        {developer.bio}
+      <div className={styles.developerBio}>
+        {developer.bio || 'Aucune biographie disponible'}
       </div>
 
-      <div className="skills-section">
-        <p className="section-title">💻 Compétences principales</p>
-        <div className="skills-list">
+      <div className={styles.skillsSection}>
+        <p className={styles.sectionTitle}>💻 Compétences</p>
+        <div className={styles.skillsList}>
           {developer.skills.map((skill, index) => (
-            <span key={index} className="skill-badge">
+            <span key={index} className={styles.skillBadge}>
               {skill}
             </span>
           ))}
         </div>
       </div>
 
-      <div className="frameworks-section">
-        <p className="section-title">🔧 Frameworks & Librairies</p>
-        <div className="frameworks-list">
+      <div className={styles.frameworksSection}>
+        <p className={styles.sectionTitle}>🔧 Frameworks & Librairies</p>
+        <div className={styles.frameworksList}>
           {developer.frameworks.map((framework, index) => (
-            <span key={index} className="framework-badge">
+            <span key={index} className={styles.frameworkBadge}>
               {framework}
             </span>
           ))}
         </div>
       </div>
 
-      <div className="card-actions">
+      <div className={styles.cardActions}>
         <button 
-          className="btn btn-edit"
+          className={`${styles.btn} ${styles.btnEdit}`}
           onClick={() => onEdit(developer)}
         >
           ✏️ Modifier 
         </button>
         <button 
-          className="btn btn-delete"
+          className={`${styles.btn} ${styles.btnDelete}`}
           onClick={() => onDelete(developer)}
         >
           🗑️ Supprimer

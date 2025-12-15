@@ -1,0 +1,174 @@
+/* Conteneur parent qui wrappe toutes les cartes */
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 380px));
+  gap: 25px;
+  justify-content: space-evenly;
+  padding: 20px 0;
+}
+
+/* OU si vous mappez directement dans un div, utilisez cette approche */
+.developerCard {
+  background: white;
+  border-radius: 16px;
+  padding: 50px ;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 400px;
+  display: inline-block; /* ⬅️ Ajouté */
+  vertical-align: top; /* ⬅️ Ajouté */
+
+}
+
+/* Solution alternative: utilisez le parent direct des cartes */
+.developerCard:nth-child(n) {
+  display: inline-block;
+  vertical-align: top;
+}
+
+/* Conteneur Grid pour afficher plusieurs cartes par ligne */
+.developerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 380px));
+  gap: 25px;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.developerCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+}
+
+.developerCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.developerInfo h3 {
+  font-size: 20px;
+  color: #2c3e50;
+  margin-bottom: 5px;
+}
+
+.developerBio {
+  color: #555;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 3px solid #667eea;
+}
+
+.skillsSection,
+.frameworksSection {
+  margin-bottom: 20px;
+}
+
+.sectionTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #7f8c8d;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.skillsList,
+.frameworksList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skillBadge,
+.frameworkBadge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.skillBadge {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.skillBadge:hover {
+  background-color: #1976d2;
+  color: white;
+  transform: scale(1.05);
+}
+
+.frameworkBadge {
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.frameworkBadge:hover {
+  background-color: #7b1fa2;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Location Section */
+.locationSection {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #ecf0f1;
+}
+
+.locationText {
+  color: #2c3e50;
+  font-size: 14px;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* Contact Section */
+.contactSection {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #ecf0f1;
+}
+
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.contactItem {
+  color: #2c3e50;
+  font-size: 14px;
+  margin: 0;
+}
+
+.noData {
+  color: #95a5a6;
+  font-size: 13px;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .developerGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .developerCard {
+    max-width: 100%;
+  }
+}
+

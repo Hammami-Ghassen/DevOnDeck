@@ -1,5 +1,4 @@
-/* Overlay sombre derrière la modale */
-.modal-overlay {
+.modalOverlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -23,8 +22,7 @@
   }
 }
 
-/* Contenu de la modale */
-.modal-content {
+.modalContent {
   background: white;
   border-radius: 16px;
   padding: 30px;
@@ -48,8 +46,7 @@
   }
 }
 
-/* En-tête de la modale */
-.modal-header {
+.modalHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -58,13 +55,13 @@
   border-bottom: 2px solid #f0f0f0;
 }
 
-.modal-header h2 {
+.modalHeader h2 {
   font-size: 24px;
   color: #2c3e50;
   font-weight: 600;
 }
 
-.close-btn {
+.closeBtn {
   background: none;
   border: none;
   font-size: 28px;
@@ -79,33 +76,32 @@
   border-radius: 50%;
 }
 
-.close-btn:hover {
+.closeBtn:hover {
   background-color: #f0f0f0;
   color: #e74c3c;
   transform: rotate(90deg);
 }
 
-/* Formulaire */
-.modal-form {
+.modalForm {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.form-group {
+.formGroup {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.form-group label {
+.formGroup label {
   font-size: 14px;
   font-weight: 600;
   color: #2c3e50;
 }
 
-.form-group input,
-.form-group textarea {
+.formGroup input,
+.formGroup textarea {
   padding: 12px 16px;
   border: 2px solid #ecf0f1;
   border-radius: 8px;
@@ -115,21 +111,20 @@
   background-color: #fafafa;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
+.formGroup input:focus,
+.formGroup textarea:focus {
   outline: none;
   border-color: #3498db;
   background-color: white;
   box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
 
-.form-group textarea {
+.formGroup textarea {
   resize: vertical;
   min-height: 80px;
 }
 
-/* Champs de compétences */
-.skills-input {
+.skillsInput {
   padding: 12px 16px;
   border: 2px solid #ecf0f1;
   border-radius: 8px;
@@ -138,27 +133,26 @@
   transition: all 0.3s ease;
 }
 
-.skills-input:focus {
+.skillsInput:focus {
   outline: none;
   border-color: #3498db;
   background-color: white;
   box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
 
-.skills-help {
+.skillsHelp {
   font-size: 12px;
   color: #7f8c8d;
   font-style: italic;
 }
 
-/* Boutons d'action */
-.modal-actions {
+.modalFooter {
   display: flex;
   gap: 15px;
   margin-top: 10px;
 }
 
-.save-btn {
+.saveBtn {
   flex: 1;
   padding: 14px 24px;
   background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
@@ -171,12 +165,12 @@
   transition: all 0.3s ease;
 }
 
-.save-btn:hover {
+.saveBtn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(39, 174, 96, 0.3);
 }
 
-.cancel-btn {
+.cancelBtn {
   flex: 1;
   padding: 14px 24px;
   background-color: #ecf0f1;
@@ -189,44 +183,43 @@
   transition: all 0.3s ease;
 }
 
-.cancel-btn:hover {
+.cancelBtn:hover {
   background-color: #bdc3c7;
 }
 
-/* Confirmation de suppression */
-.delete-confirmation {
+.deleteConfirmation {
   text-align: center;
 }
 
-.warning-icon {
+.warningIcon {
   font-size: 60px;
   margin-bottom: 20px;
 }
 
-.delete-confirmation h3 {
+.deleteConfirmation h3 {
   font-size: 22px;
   color: #2c3e50;
   margin-bottom: 15px;
 }
 
-.delete-confirmation p {
+.deleteConfirmation p {
   color: #7f8c8d;
   font-size: 15px;
   line-height: 1.6;
   margin-bottom: 25px;
 }
 
-.developer-name-highlight {
+.developerNameHighlight {
   color: #e74c3c;
   font-weight: 600;
 }
 
-.delete-actions {
+.deleteActions {
   display: flex;
   gap: 15px;
 }
 
-.btn-confirm-delete {
+.btnConfirmDelete {
   flex: 1;
   padding: 14px 24px;
   background-color: #e74c3c;
@@ -239,24 +232,128 @@
   transition: all 0.3s ease;
 }
 
-.btn-confirm-delete:hover {
+.btnConfirmDelete:hover {
   background-color: #c0392b;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
-  .modal-content {
+  .modalContent {
     padding: 20px;
   }
   
-  .modal-header h2 {
+  .modalHeader h2 {
     font-size: 20px;
   }
   
-  .modal-actions,
-  .delete-actions {
+  .modalFooter,
+  .deleteActions {
     flex-direction: column;
+  }
+}
+
+
+/* Tag Input Styles */
+.tagInputWrapper {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.tagInput {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.tagInput:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.addBtn {
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.addBtn:hover:not(:disabled) {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+.addBtn:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.tagsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  min-height: 40px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: #3498db;
+  color: white;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.frameworkTag {
+  background-color: #9b59b6;
+}
+
+.removeTagBtn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.removeTagBtn:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.emptyHint {
+  display: block;
+  margin-top: 10px;
+  color: #95a5a6;
+  font-size: 14px;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .tagInputWrapper {
+    flex-direction: column;
+  }
+
+  .addBtn {
+    width: 100%;
   }
 }

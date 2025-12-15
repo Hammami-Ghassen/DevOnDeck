@@ -1,8 +1,10 @@
 // routes/adminRoutes.js
 import express from 'express';
 import * as adminController from '../controllers/adminController.js';
-
+import { protect, adminOnly } from '../middleware/authMiddleware.js';
 const router = express.Router();
+
+router.use(protect, adminOnly);
 
 // GET /admin/developers
 router.get('/developers', adminController.getDevelopers);
