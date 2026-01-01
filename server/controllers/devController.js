@@ -1,4 +1,4 @@
-import Offer from "../models/offerModel.js";
+import Application from "../models/applicationModel.js";
 import mongoose from "mongoose";
 
 export const getDevelopersByOfferId = async (req, res) => {
@@ -10,16 +10,18 @@ export const getDevelopersByOfferId = async (req, res) => {
             return res.status(400).json({ message: 'ID d\'offre invalide' });
         }
         
-        const offer = await Offer.findById(offerId);
+        // Récupérer les candidatures pour cette offre avec les détails des développeurs
+        const applications = await Application.find({ offerId })
+            .populate('developerId', 'name email profile contact skills frameworks')
+            .sort({ createdAt: -1 });
 
-        if (!offer) {
-            return res.status(404).json({ message: 'Offre non trouvée' });
-        }
+        // Extraire les IDs des développeurs
+        const applicantIds = applications.map(app => app.developerId._id.toString());
         
-        // Convertir les ObjectId en strings
-        const applicantIds = offer.applicants.map(id => id.toString());
-        
-        return res.status(200).json({ applicants: applicantIds });
+        return res.status(200).json({ 
+            applicants: applicantIds,
+            applications: applications
+        });
     } catch (error) {
         console.error('Erreur getDevelopersByOfferId:', error);
         return res.status(500).json({ 

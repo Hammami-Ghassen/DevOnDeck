@@ -13,14 +13,13 @@ const DeveloperProfile = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [isEditing, setIsEditing] = useState(false);
   const [canEdit, setCanEdit] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleError = useCallback((err, action = 'loading') => {
     console.error(`Error during ${action}:`, err);
-    
+
     if (err.response?.status === 401) {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('user');
@@ -41,13 +40,13 @@ const DeveloperProfile = () => {
       try {
         const res = await axios.get(`/users/${id}`);
         setDeveloper(res.data);
-        
+
         const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
-        const canEditProfile = 
-          currentUser._id === id || 
+        const canEditProfile =
+          currentUser._id === id ||
           currentUser.role === 'admin';
         setCanEdit(canEditProfile);
-        
+
       } catch (err) {
         handleError(err, 'fetching');
       } finally {
@@ -57,42 +56,12 @@ const DeveloperProfile = () => {
     if (id) fetchDeveloper();
   }, [id, handleError]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setDeveloper({ ...developer, [name]: value });
-  };
-
-  const handleContactChange = (e) => {
-    const { name, value } = e.target;
-    setDeveloper({
-      ...developer,
-      contact: { ...developer.contact, [name]: value },
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSaving(true);
-    setError("");
-    setSuccess("");
-    
-    try {
-      await axios.put(`/users/${id}`, developer);
-      setSuccess("Profil mis à jour avec succès !");
-      setIsEditing(false);
-      setTimeout(() => setSuccess(""), 3000);
-    } catch (err) {
-      handleError(err, 'updating');
-    } finally {
-      setSaving(false);
-    }
-  };
 
   const handleModalSave = async (updatedDeveloper) => {
     setSaving(true);
     setError("");
     setSuccess("");
-    
+
     try {
       await axios.put(`/users/${id}`, updatedDeveloper);
       setDeveloper(updatedDeveloper);
@@ -107,17 +76,10 @@ const DeveloperProfile = () => {
   };
 
   const handleLogout = async () => {
-    try {
-      await axios.post('/auth/logout');
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('user');
-      navigate('/login');
-    } catch (err) {
-      console.error('Logout error:', err);
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('user');
-      navigate('/login');
-    }
+    await axios.post('/auth/logout');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('user');
+    navigate('/login');
   };
 
   const toggleEdit = () => {
@@ -141,7 +103,7 @@ const DeveloperProfile = () => {
         <div className={styles.errorIcon}>⚠️</div>
         <h3>Erreur</h3>
         <p>{error}</p>
-        <button onClick={() => navigate('/')} className={styles.btnPrimary}>
+        <button onClick={() => navigate('/home')} className={styles.btnPrimary}>
           Retour à l'accueil
         </button>
       </div>
@@ -170,6 +132,28 @@ const DeveloperProfile = () => {
           </div>
 
           <div className={styles.headerActions}>
+            <button onClick={() => navigate('/home')} style={{
+              padding: '10px 24px',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: '600',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)'
+            }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 6px 16px rgba(102, 126, 234, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.3)';
+              }} className={styles.btnSecondary}>
+              Accueil
+            </button>
             {canEdit && (
               <button onClick={toggleEdit} className={styles.editBtn}>
                 ✏️ Modifier
@@ -193,12 +177,12 @@ const DeveloperProfile = () => {
           >
             👤 Informations
           </button>
-          <button
+          {localStorage.getItem('accessToken') &&(<button
             className={`${styles.tabButton} ${activeTab === 'applications' ? styles.activeTab : ''}`}
             onClick={() => setActiveTab('applications')}
           >
             📋 Candidatures
-          </button>
+          </button>)}
         </div>
       </div>
 

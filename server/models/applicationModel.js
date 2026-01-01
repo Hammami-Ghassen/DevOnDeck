@@ -24,6 +24,17 @@ const applicationSchema = new mongoose.Schema({
     default: "",
   },
   
+  // CV as base64 string
+  cv: {
+    type: String,
+    default: "",
+  },
+  
+  cvFilename: {
+    type: String,
+    default: "",
+  },
+  
   // Track if the developer has been notified
   notified: {
     type: Boolean,

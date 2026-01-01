@@ -3,12 +3,13 @@ import axios from 'axios';
 import DeveloperListOffer from './DeveloperListOffer';
 import styles from '../Styles/ApplicantsList.module.css';
 import styles2 from '../Styles/Test.module.css';
+import { useParams } from 'react-router-dom';
 
-const ApplicantsList = ({ offerId }) => {
+const ApplicantsList = ({}) => {
   const [developers, setDevelopers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const {offerId}=useParams()
   useEffect(() => {
     const fetchApplicants = async () => {
       try {

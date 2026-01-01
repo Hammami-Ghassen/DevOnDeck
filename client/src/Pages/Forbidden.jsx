@@ -31,7 +31,7 @@ const Forbidden = () => {
           <button onClick={goToMyDashboard} className={styles.btnPrimary}>
             Retour à mon tableau de bord
           </button>
-          <Link to="/" className={styles.btnSecondary}>
+          <Link to="/Home" className={styles.btnSecondary}>
             Retour à l'accueil
           </Link>
         </div>

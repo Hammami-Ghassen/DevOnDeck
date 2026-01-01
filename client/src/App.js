@@ -11,6 +11,7 @@ import Home from './Pages/Home.jsx';
 import CreateOffer from './Pages/CreateOffer.jsx';
 import OrganizationDashboard from "./Pages/OrganizationDashboard.jsx"
 import OfferDetails from './Pages/offerDetails.jsx';
+import ApplicantsList from './components/ApplicantsList.jsx'
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/organization/create-offer" element={<CreateOffer />} />
         <Route path="/organization/dashboard" element={<OrganizationDashboard />} />
+        <Route path="/organization/applicants/:offerId" element={<ApplicantsList />} />
         
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" />} />

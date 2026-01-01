@@ -7,10 +7,17 @@ import styles from '../Styles/Home.module.css';
 const Home = () => {
   const navigate = useNavigate();
   const [offers, setOffers] = useState([]);
-  const [filteredOffers, setFilteredOffers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedContract, setSelectedContract] = useState('all');
+  const [selectedExperience, setSelectedExperience] = useState('all');
+  
+  // Get current user
+  const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
+  const isLoggedIn = !!currentUser;
+
+  const [filteredOffers, setFilteredOffers] = useState([]);
   const [filters, setFilters] = useState({
     contractType: '',
     experienceLevel: '',
@@ -113,6 +120,21 @@ const Home = () => {
     return labels[level] || level;
   };
 
+  const handleProfileRedirect = () => {
+    if (!currentUser) {
+      navigate('/login');
+      return;
+    }
+
+    if (currentUser.role === 'admin') {
+      navigate('/admin/dashboard');
+    } else if (currentUser.role === 'developer') {
+      navigate(`/developer/${currentUser._id}`);
+    } else if (currentUser.role === 'organization') {
+      navigate('/organization/dashboard');
+    }
+  };
+
   if (loading) {
     return (
       <div className="app-container">
@@ -132,10 +154,43 @@ const Home = () => {
       <main className={styles.homeContainer}>
         {/* Hero Section */}
         <div className={styles.heroSection}>
-          <h1 className={styles.heroTitle}>Trouvez votre prochain défi</h1>
-          <p className={styles.heroSubtitle}>
-            {offers.length} offres d'emploi pour développeurs
-          </p>
+          <div className={styles.heroContent}>
+            <div className={styles.heroText}>
+              <h1 className={styles.heroTitle}>Trouvez votre prochain défi</h1>
+              <p className={styles.heroSubtitle}>
+                {offers.length} offres d'emploi pour développeurs
+              </p>
+            </div>
+            
+            {/* User Profile/Login Button */}
+            <div className={styles.heroProfile}>
+              {isLoggedIn ? (
+                <button onClick={handleProfileRedirect} className={styles.profileButton}>
+                  <div className={styles.heroAvatar}>
+                    {currentUser.avatar ? (
+                      <img src={currentUser.avatar} alt={currentUser.name} />
+                    ) : (
+                      <div className={styles.heroAvatarPlaceholder}>
+                        {currentUser.name?.charAt(0)?.toUpperCase() || "?"}
+                      </div>
+                    )}
+                  </div>
+                  <div className={styles.profileInfo}>
+                    <span className={styles.profileName}>{currentUser.name}</span>
+                    <span className={styles.profileRole}>
+                      {currentUser.role === 'developer' ? '👨‍💻 Développeur' : 
+                       currentUser.role === 'organization' ? '🏢 Organisation' : 
+                       '⚙️ Admin'}
+                    </span>
+                  </div>
+                </button>
+              ) : (
+                <button onClick={() => navigate('/login')} className={styles.loginButton}>
+                  🔐 Se connecter
+                </button>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Search and Filters */}
@@ -224,7 +279,7 @@ const Home = () => {
                 </div>
 
                 <div className={styles.offerCompany}>
-                  🏢 {offer.organizationName || 'Organisation'}
+                  🏢 {offer.organizationId?.name || 'Organisation'}
                 </div>
 
                 <p className={styles.offerDescription}>

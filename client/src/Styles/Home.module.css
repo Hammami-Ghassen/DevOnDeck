@@ -6,9 +6,27 @@
   
   .heroSection {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 4rem 2rem;
-    text-align: center;
     color: white;
+    padding: 60px 40px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+  }
+  
+  .heroContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .heroText {
+    flex: 1;
+  }
+  
+  .heroProfile {
+    flex-shrink: 0;
   }
   
   .heroTitle {
@@ -20,6 +38,70 @@
   .heroSubtitle {
     font-size: 1.3rem;
     opacity: 0.95;
+  }
+  
+  .profileButton {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 12px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .profileButton:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .heroAvatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid white;
+    flex-shrink: 0;
+  }
+  
+  .heroAvatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .heroAvatarPlaceholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+  }
+  
+  .profileInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .profileName {
+    font-weight: 700;
+    font-size: 1rem;
+    color: white;
+  }
+  
+  .profileRole {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.9);
   }
   
   .searchSection {
@@ -290,6 +372,24 @@
     margin-bottom: 0.5rem;
   }
   
+  .loginButton {
+    background: white;
+    color: #667eea;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .loginButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+  
   @media (max-width: 768px) {
     .heroTitle {
       font-size: 2rem;
@@ -320,5 +420,23 @@
     .offerFooter {
       flex-direction: column;
       align-items: flex-start;
+    }
+  
+    .heroContent {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .heroProfile {
+      width: 100%;
+    }
+  
+    .profileButton {
+      width: 100%;
+      justify-content: center;
+    }
+  
+    .loginButton {
+      width: 100%;
     }
   }

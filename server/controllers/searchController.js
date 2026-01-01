@@ -21,7 +21,7 @@ export const getOrganizationOffers = async (req, res) => {
             };
         }
 
-        const offers = await Offer.find(query).sort({ createdAt: -1 });
+        const offers = await Offer.find(query).populate('organizationId', 'name email').sort({ createdAt: -1 });
         res.status(200).json(offers);
     } catch (error) {
         res.status(500).json({ message: "Erreur lors de la récupération des offres", error: error.message });

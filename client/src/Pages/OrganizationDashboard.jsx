@@ -377,7 +377,7 @@ const OrganizationDashboard = () => {
                                 ) : (
                                     <div className={styles.offersGrid}>
                                         {filteredOffers.map((offer) => (
-                                            <div key={offer._id} className={styles.offerCard}>
+                                            <div key={offer._id} className={styles.offerCard} onClick={()=>navigate(`/organization/applicants/${offer._id}`)}>
                                                 <div className={styles.offerHeader}>
                                                     <h4>{offer.title}</h4>
                                                     {getStatusBadge(offer.status)}

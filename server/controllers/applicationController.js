@@ -4,8 +4,7 @@ import Application from '../models/applicationModel.js';
 export const getDeveloperApplications = async (req, res) => {
   try {
     const developerId = req.user._id;
-    
-    const applications = await Application.find({ developerId })
+    const applications = await Application.find({developerId})
       .populate({
         path: 'offerId',
         populate: {
@@ -14,7 +13,6 @@ export const getDeveloperApplications = async (req, res) => {
         }
       })
       .sort({ createdAt: -1 });
-    
     res.status(200).json(applications);
   } catch (error) {
     res.status(500).json({ 

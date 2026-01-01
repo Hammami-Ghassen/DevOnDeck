@@ -61,19 +61,10 @@
       }
     },
     {
-      "name": "Ghassen hammemi",
-      "email": "ghassen@gmail.com",
+      "name": "Admin",
+      "email": "admin@admin.com",
       "password": "$2b$10$PCSSum71s.H74x5CRrsom.CkjwVzNWX.fv7q4xV/m5bnvsPeeNjPm",
-      "role": "admin",
-      "bio": "Développeur Backend avec expertise en microservices",
-      "skills": ["Python", "Django", "PostgreSQL", "Docker", "Kubernetes"],
-      "frameworks": ["FastAPI", "Celery", "Redis"],
-      "avatar": "",
-      "localisation": "Tunis, Tunisia",
-      "contact": {
-        "mail": "ghassend@gmail.com",
-        "numero": "+21650000005"
-      }
+      "role": "admin"
     }
   ]
 }

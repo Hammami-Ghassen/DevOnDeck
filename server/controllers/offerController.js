@@ -42,7 +42,7 @@ export const applyToOffer = async (req, res) => {
   try {
     const { id } = req.params;
     const developerId = req.user._id;
-    const { coverLetter } = req.body;
+    const { coverLetter, cv, cvFilename } = req.body;
     
     // Check if offer exists and is active
     const offer = await Offer.findById(id);
@@ -69,6 +69,8 @@ export const applyToOffer = async (req, res) => {
       developerId,
       offerId: id,
       coverLetter: coverLetter || "",
+      cv: cv || "",
+      cvFilename: cvFilename || ""
     });
     
     res.status(201).json({ 
@@ -76,7 +78,7 @@ export const applyToOffer = async (req, res) => {
       application
     });
   } catch (error) {
-    console.error('Apply error:', error); // Debug log
+    console.error('Apply error:', error);
     if (error.code === 11000) {
       return res.status(400).json({ message: "Vous avez déjà postulé à cette offre" });
     }
