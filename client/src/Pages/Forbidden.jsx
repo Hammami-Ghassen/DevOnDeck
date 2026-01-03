@@ -20,19 +20,19 @@ const Forbidden = () => {
 
   return (
     <div className={styles.errorContainer}>
-      <div className={styles.errorCard}>
-        <div className={styles.errorIcon}>🚫</div>
-        <h1 className={styles.errorTitle}>403</h1>
-        <h2 className={styles.errorSubtitle}>Accès refusé</h2>
-        <p className={styles.errorMessage}>
+      <div className={`${styles.errorCard} animate-card`}>
+        <div className={`${styles.errorIcon} animate-header`}>🚫</div>
+        <h1 className={`${styles.errorTitle} animate-content delay-100`}>403</h1>
+        <h2 className={`${styles.errorSubtitle} animate-content delay-200`}>Accès refusé</h2>
+        <p className={`${styles.errorMessage} animate-content delay-300`}>
           Vous n'avez pas les permissions nécessaires pour accéder à cette page.
         </p>
-        <div className={styles.errorActions}>
+        <div className={`${styles.errorActions} animate-section delay-400`}>
           <button onClick={goToMyDashboard} className={styles.btnPrimary}>
-            Retour à mon tableau de bord
+            Mon Dashboard
           </button>
-          <Link to="/Home" className={styles.btnSecondary}>
-            Retour à l'accueil
+          <Link to="/home" className={styles.btnSecondary}>
+            Page d'accueil
           </Link>
         </div>
       </div>

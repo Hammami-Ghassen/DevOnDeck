@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from '../utils/axios';  // ✅ Now safe to use!
+import axios from '../utils/axios';
 import styles from '../Styles/Auth.module.css';
 
 const Login = () => {
@@ -74,7 +74,7 @@ const Login = () => {
       console.error('❌ Login error:', err);
       setErrors({
         ...errors,
-        general: err.response?.data?.message || 'Erreur lors de la connexion. Veuillez vérifier vos identifiants.'
+        general: err.response?.data?.message || 'Erreur lors de la connexion. Veuillez réessayer.'
       });
     } finally {
       setLoading(false);
@@ -83,16 +83,16 @@ const Login = () => {
 
   return (
     <div className={styles.authContainer}>
-      <div className={styles.authCard}>
-        <h2>🔐 Connexion</h2>
+      <div className={`${styles.authCard} animate-card`}>
+        <h2 className="animate-header">🔐 Connexion</h2>
         
         {errors.general && (
-          <div className={styles.errorMessage}>
+          <div className={`${styles.errorMessage} animate-content`}>
             {errors.general}
           </div>
         )}
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="animate-content delay-100">
           <div className={styles.formGroup}>
             <label className={errors.email ? styles.errorLabel : ''}>
               Email
@@ -142,7 +142,7 @@ const Login = () => {
           </button>
         </form>
         
-        <p className={styles.authLink}>
+        <p className={`${styles.authLink} animate-content delay-200`}>
           Pas de compte ? <Link to="/register">S'inscrire</Link>
         </p>
       </div>

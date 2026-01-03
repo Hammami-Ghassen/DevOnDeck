@@ -10,74 +10,29 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedContract, setSelectedContract] = useState('all');
-  const [selectedExperience, setSelectedExperience] = useState('all');
-  
-  // Get current user
-  const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
-  const isLoggedIn = !!currentUser;
-
-  const [filteredOffers, setFilteredOffers] = useState([]);
   const [filters, setFilters] = useState({
     contractType: '',
-    experienceLevel: '',
-    localisation: ''
+    experienceLevel: ''
   });
+
+  const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
 
   useEffect(() => {
     fetchOffers();
   }, []);
-
-  useEffect(() => {
-    applyFilters();
-  }, [searchTerm, filters, offers]);
 
   const fetchOffers = async () => {
     try {
       setLoading(true);
       const response = await axios.get('/offers');
       setOffers(response.data);
-      setFilteredOffers(response.data);
+      setError('');
     } catch (err) {
       setError('Erreur lors du chargement des offres');
       console.error(err);
     } finally {
       setLoading(false);
     }
-  };
-
-  const applyFilters = () => {
-    let filtered = offers;
-
-    // Search filter
-    if (searchTerm) {
-      filtered = filtered.filter(offer =>
-        offer.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        offer.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        offer.requiredSkills.some(skill => 
-          skill.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      );
-    }
-
-    // Contract type filter
-    if (filters.contractType) {
-      filtered = filtered.filter(offer => offer.contractType === filters.contractType);
-    }
-
-    // Experience level filter
-    if (filters.experienceLevel) {
-      filtered = filtered.filter(offer => offer.experienceLevel === filters.experienceLevel);
-    }
-
-    // Location filter
-    if (filters.localisation) {
-      filtered = filtered.filter(offer =>
-        offer.preferredLocalisation.toLowerCase().includes(filters.localisation.toLowerCase())
-      );
-    }
-
-    setFilteredOffers(filtered);
   };
 
   const handleFilterChange = (filterName, value) => {
@@ -87,14 +42,22 @@ const Home = () => {
     }));
   };
 
-  const clearFilters = () => {
-    setFilters({
-      contractType: '',
-      experienceLevel: '',
-      localisation: ''
-    });
-    setSearchTerm('');
-  };
+  const filteredOffers = offers.filter(offer => {
+    const matchesSearch = !searchTerm || 
+      offer.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      offer.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      offer.requiredSkills?.some(skill => 
+        skill.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+    const matchesContract = !filters.contractType || 
+      offer.contractType === filters.contractType;
+
+    const matchesExperience = !filters.experienceLevel || 
+      offer.experienceLevel === filters.experienceLevel;
+
+    return matchesSearch && matchesContract && matchesExperience;
+  });
 
   const handleOfferClick = (offerId) => {
     navigate(`/offers/${offerId}`);
@@ -108,31 +71,6 @@ const Home = () => {
       'stage': 'Stage'
     };
     return labels[type] || type;
-  };
-
-  const getExperienceLevelLabel = (level) => {
-    const labels = {
-      'junior': 'Junior',
-      'intermediate': 'Intermédiaire',
-      'senior': 'Senior',
-      'expert': 'Expert'
-    };
-    return labels[level] || level;
-  };
-
-  const handleProfileRedirect = () => {
-    if (!currentUser) {
-      navigate('/login');
-      return;
-    }
-
-    if (currentUser.role === 'admin') {
-      navigate('/admin/dashboard');
-    } else if (currentUser.role === 'developer') {
-      navigate(`/developer/${currentUser._id}`);
-    } else if (currentUser.role === 'organization') {
-      navigate('/organization/dashboard');
-    }
   };
 
   if (loading) {
@@ -152,172 +90,128 @@ const Home = () => {
       <Header />
       
       <main className={styles.homeContainer}>
-        {/* Hero Section */}
+        {/* Hero Section - Full Width */}
         <div className={styles.heroSection}>
           <div className={styles.heroContent}>
             <div className={styles.heroText}>
               <h1 className={styles.heroTitle}>Trouvez votre prochain défi</h1>
-              <p className={styles.heroSubtitle}>
-                {offers.length} offres d'emploi pour développeurs
-              </p>
-            </div>
-            
-            {/* User Profile/Login Button */}
-            <div className={styles.heroProfile}>
-              {isLoggedIn ? (
-                <button onClick={handleProfileRedirect} className={styles.profileButton}>
-                  <div className={styles.heroAvatar}>
-                    {currentUser.avatar ? (
-                      <img src={currentUser.avatar} alt={currentUser.name} />
-                    ) : (
-                      <div className={styles.heroAvatarPlaceholder}>
-                        {currentUser.name?.charAt(0)?.toUpperCase() || "?"}
-                      </div>
-                    )}
-                  </div>
-                  <div className={styles.profileInfo}>
-                    <span className={styles.profileName}>{currentUser.name}</span>
-                    <span className={styles.profileRole}>
-                      {currentUser.role === 'developer' ? '👨‍💻 Développeur' : 
-                       currentUser.role === 'organization' ? '🏢 Organisation' : 
-                       '⚙️ Admin'}
-                    </span>
-                  </div>
-                </button>
-              ) : (
-                <button onClick={() => navigate('/login')} className={styles.loginButton}>
-                  🔐 Se connecter
-                </button>
-              )}
             </div>
           </div>
         </div>
 
-        {/* Search and Filters */}
-        <div className={styles.searchSection}>
-          <div className={styles.searchBar}>
-            <span className={styles.searchIcon}>🔍</span>
-            <input
-              type="text"
-              placeholder="Rechercher par titre, compétences..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className={styles.searchInput}
-            />
-          </div>
+        {/* Main Content - Constrained Width */}
+        <div className={styles.mainContent}>
+          {/* Search Section */}
+          <div className={`${styles.searchSection} animate-content`}>
+            <div className={styles.searchBar}>
+              <span className={styles.searchIcon}>🔍</span>
+              <input
+                type="text"
+                placeholder="Rechercher par titre, compétences..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={styles.searchInput}
+              />
+            </div>
 
-          <div className={styles.filtersRow}>
-            <select
-              value={filters.contractType}
-              onChange={(e) => handleFilterChange('contractType', e.target.value)}
-              className={styles.filterSelect}
-            >
-              <option value="">Tous les contrats</option>
-              <option value="CDI">CDI</option>
-              <option value="CDD">CDD</option>
-              <option value="freelance">Freelance</option>
-              <option value="stage">Stage</option>
-            </select>
-
-            <select
-              value={filters.experienceLevel}
-              onChange={(e) => handleFilterChange('experienceLevel', e.target.value)}
-              className={styles.filterSelect}
-            >
-              <option value="">Tous les niveaux</option>
-              <option value="junior">Junior</option>
-              <option value="intermediate">Intermédiaire</option>
-              <option value="senior">Senior</option>
-              <option value="expert">Expert</option>
-            </select>
-
-            <input
-              type="text"
-              placeholder="Localisation"
-              value={filters.localisation}
-              onChange={(e) => handleFilterChange('localisation', e.target.value)}
-              className={styles.filterInput}
-            />
-
-            {(searchTerm || filters.contractType || filters.experienceLevel || filters.localisation) && (
-              <button onClick={clearFilters} className={styles.clearBtn}>
-                ✕ Réinitialiser
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Results Count */}
-        <div className={styles.resultsCount}>
-          {filteredOffers.length} {filteredOffers.length === 1 ? 'offre trouvée' : 'offres trouvées'}
-        </div>
-
-        {/* Offers Grid */}
-        {error && <div className={styles.error}>{error}</div>}
-        
-        {!error && filteredOffers.length === 0 && (
-          <div className={styles.emptyState}>
-            <div className={styles.emptyIcon}>📭</div>
-            <h3>Aucune offre trouvée</h3>
-            <p>Essayez de modifier vos critères de recherche</p>
-          </div>
-        )}
-
-        {!error && filteredOffers.length > 0 && (
-          <div className={styles.offersGrid}>
-            {filteredOffers.map((offer) => (
-              <div
-                key={offer._id}
-                className={styles.offerCard}
-                onClick={() => handleOfferClick(offer._id)}
+            <div className={styles.filtersRow}>
+              <select
+                value={filters.contractType}
+                onChange={(e) => handleFilterChange('contractType', e.target.value)}
+                className={styles.filterSelect}
               >
-                <div className={styles.offerHeader}>
-                  <h3 className={styles.offerTitle}>{offer.title}</h3>
-                  <span className={`${styles.contractBadge} ${styles[offer.contractType]}`}>
-                    {getContractTypeLabel(offer.contractType)}
-                  </span>
-                </div>
+                <option value="">Tous les contrats</option>
+                <option value="CDI">CDI</option>
+                <option value="CDD">CDD</option>
+                <option value="freelance">Freelance</option>
+                <option value="stage">Stage</option>
+              </select>
 
-                <div className={styles.offerCompany}>
-                  🏢 {offer.organizationId?.name || 'Organisation'}
-                </div>
-
-                <p className={styles.offerDescription}>
-                  {offer.description.substring(0, 150)}...
-                </p>
-
-                <div className={styles.offerSkills}>
-                  {offer.requiredSkills.slice(0, 4).map((skill, index) => (
-                    <span key={index} className={styles.skillTag}>
-                      {skill}
-                    </span>
-                  ))}
-                  {offer.requiredSkills.length > 4 && (
-                    <span className={styles.skillTag}>
-                      +{offer.requiredSkills.length - 4}
-                    </span>
-                  )}
-                </div>
-
-                <div className={styles.offerFooter}>
-                  <div className={styles.offerInfo}>
-                    <span className={styles.infoItem}>
-                      📍 {offer.preferredLocalisation || 'Non spécifié'}
-                    </span>
-                    <span className={styles.infoItem}>
-                      💼 {getExperienceLevelLabel(offer.experienceLevel)}
-                    </span>
-                  </div>
-                  {offer.salary && offer.salary.min && (
-                    <div className={styles.offerSalary}>
-                      💰 {offer.salary.min} - {offer.salary.max} TND
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
+              <select
+                value={filters.experienceLevel}
+                onChange={(e) => handleFilterChange('experienceLevel', e.target.value)}
+                className={styles.filterSelect}
+              >
+                <option value="">Tous les niveaux</option>
+                <option value="junior">Junior</option>
+                <option value="intermediate">Intermédiaire</option>
+                <option value="senior">Senior</option>
+                <option value="expert">Expert</option>
+              </select>
+            </div>
           </div>
-        )}
+
+          {/* Offers Section */}
+          <section className={`${styles.offersSection} animate-section`}>
+            <h2 className={styles.sectionTitle}>
+              {filteredOffers.length} offre{filteredOffers.length > 1 ? 's' : ''} disponible{filteredOffers.length > 1 ? 's' : ''}
+            </h2>
+            
+            {error ? (
+              <div className={styles.errorState}>
+                <p>⚠️ {error}</p>
+                <button onClick={fetchOffers} className={styles.retryButton}>
+                  Réessayer
+                </button>
+              </div>
+            ) : filteredOffers.length === 0 ? (
+              <div className={styles.emptyState}>
+                <div className={styles.emptyIcon}>📭</div>
+                <p>Aucune offre trouvée</p>
+                {(searchTerm || filters.contractType || filters.experienceLevel) && (
+                  <button 
+                    onClick={() => {
+                      setSearchTerm('');
+                      setFilters({ contractType: '', experienceLevel: '' });
+                    }}
+                    className={styles.clearFiltersButton}
+                  >
+                    Réinitialiser les filtres
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div className={styles.offersGrid}>
+                {filteredOffers.map((offer, index) => (
+                  <div
+                    key={offer._id}
+                    className={`${styles.offerCard} stagger-item`}
+                    style={{ animationDelay: `${0.1 * (index % 6)}s` }}
+                    onClick={() => handleOfferClick(offer._id)}
+                  >
+                    <div className={styles.offerHeader}>
+                      <h3 className={styles.offerTitle}>{offer.title}</h3>
+                      <span className={`${styles.contractBadge} ${styles[offer.contractType]}`}>
+                        {getContractTypeLabel(offer.contractType)}
+                      </span>
+                    </div>
+
+                    <div className={styles.offerCompany}>
+                      🏢 {offer.organizationId?.name || 'Organisation'}
+                    </div>
+
+                    <p className={styles.offerDescription}>
+                      {offer.description.substring(0, 150)}...
+                    </p>
+
+                    <div className={styles.offerSkills}>
+                      {offer.requiredSkills.slice(0, 4).map((skill, index) => (
+                        <span key={index} className={styles.skillTag}>
+                          {skill}
+                        </span>
+                      ))}
+                      {offer.requiredSkills.length > 4 && (
+                        <span className={styles.skillTag}>
+                          +{offer.requiredSkills.length - 4}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        </div>
       </main>
     </div>
   );

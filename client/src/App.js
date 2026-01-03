@@ -33,7 +33,7 @@ function App() {
         <Route path="/organization/applicants/:offerId" element={<ApplicantsList />} />
         
         {/* Fallback */}
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
     </Router>
   );

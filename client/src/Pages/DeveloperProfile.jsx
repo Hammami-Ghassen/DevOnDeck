@@ -103,7 +103,7 @@ const DeveloperProfile = () => {
         <div className={styles.errorIcon}>⚠️</div>
         <h3>Erreur</h3>
         <p>{error}</p>
-        <button onClick={() => navigate('/home')} className={styles.btnPrimary}>
+        <button onClick={() => navigate('/')} className={styles.btnPrimary}>
           Retour à l'accueil
         </button>
       </div>

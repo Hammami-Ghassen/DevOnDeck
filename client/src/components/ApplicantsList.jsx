@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
 import DeveloperListOffer from './DeveloperListOffer';
+import Header from './Header';
 import styles from '../Styles/ApplicantsList.module.css';
-import styles2 from '../Styles/Test.module.css';
-import { useParams } from 'react-router-dom';
 
-const ApplicantsList = ({}) => {
+const ApplicantsList = () => {
   const [developers, setDevelopers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const {offerId}=useParams()
+  const { offerId } = useParams();
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchApplicants = async () => {
       try {
@@ -35,18 +37,81 @@ const ApplicantsList = ({}) => {
     fetchApplicants();
   }, [offerId]);
 
-  if (loading) return <div>Chargement...</div>;
-  if (error) return <div>Erreur: {error}</div>;
-  if (developers.length === 0) return <div>Aucun candidat</div>;
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div className={styles.container}>
+          <div className={styles.loading}>
+            <div className={styles.spinner}></div>
+            <p>Chargement des candidats...</p>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <Header />
+        <div className={styles.container}>
+          <div className={styles.error}>
+            ⚠️ Erreur: {error}
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  if (developers.length === 0) {
+    return (
+      <>
+        <Header />
+        <div className={styles.container}>
+          <h1 className={styles.pageTitle}>Liste des candidats</h1>
+          <div className={styles.noApplicants}>
+            <p>Aucun candidat n'a postulé pour cette offre</p>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
-    <div className={styles2.container}>
-      <h1 className={styles2.pageTitle}>Liste des candidats pour l'offre</h1>
-      <h2 className={styles.title} >Candidats ({developers.length})</h2>
-      {developers.map(developer => (
-        <DeveloperListOffer key={developer._id} developer={developer} />
-      ))}
-    </div>
+    <>
+      <Header />
+      <div className={styles.container}>
+        <button 
+          onClick={() => navigate(-1)} 
+          className={styles.backButton}
+        >
+          ← Retour
+        </button>
+
+        <h1 className={styles.pageTitle}>Liste des candidats pour l'offre</h1>
+        
+        <div className={styles.statsCard}>
+          <div className={styles.statIcon}>👥</div>
+          <div className={styles.statInfo}>
+            <h3>{developers.length}</h3>
+            <p>Candidat{developers.length > 1 ? 's' : ''} postulé{developers.length > 1 ? 's' : ''}</p>
+          </div>
+        </div>
+
+        <div className={styles.developersList}>
+          {developers.map((developer, index) => (
+            <div 
+              key={developer._id} 
+              className={styles.developerCardWrapper}
+              style={{ animationDelay: `${0.1 * (index % 6)}s` }}
+            >
+              <DeveloperListOffer developer={developer} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
 };
 

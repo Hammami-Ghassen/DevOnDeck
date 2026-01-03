@@ -3,182 +3,284 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 2rem;
+  background: var(--bg-gradient);
+  padding: var(--spacing-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.authContainer::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+  animation: pulse 10s infinite;
 }
 
 .authCard {
-  background: white;
-  padding: 2.5rem;
-  border-radius: 15px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  background: var(--white);
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--card-shadow);
+  max-width: 480px;
   width: 100%;
-  max-width: 450px;
+  position: relative;
+  z-index: 1;
+  animation: fadeInUp 0.6s ease;
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .authCard h2 {
+  font-size: var(--font-3xl);
+  font-weight: var(--font-extrabold);
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--spacing-sm);
   text-align: center;
-  margin-bottom: 2rem;
-  color: #2c3e50;
-  font-size: 2rem;
+  letter-spacing: -0.5px;
 }
 
+/* Error Message */
 .errorMessage {
-  padding: 12px 16px;
-  margin-bottom: 16px;
-  background-color: #fee;
-  color: #c33;
-  border-radius: 8px;
-  font-size: 14px;
-  border: 1px solid #fcc;
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border-left: 4px solid var(--danger-color);
+  color: #991b1b;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+  font-weight: var(--font-semibold);
   text-align: center;
+  animation: slideInRight 0.3s ease;
 }
 
+/* User Type Selector */
 .userTypeSelector {
   display: flex;
-  gap: 0;
-  margin-bottom: 2rem;
-  border-radius: 10px;
-  overflow: hidden;
-  border: 2px solid #ecf0f1;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-xs);
+  background: var(--background-secondary);
+  border-radius: var(--radius-lg);
 }
 
 .userTypeButton {
   flex: 1;
-  padding: 1rem;
-  border: none;
-  background: white;
+  padding: 14px 20px;
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  font-size: var(--font-base);
+  font-weight: var(--font-semibold);
+  color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.95rem;
-  font-weight: 600;
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.userTypeButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-gradient);
+  opacity: 0;
+  transition: var(--transition-smooth);
+  z-index: -1;
+}
+
+.userTypeButton:hover {
+  color: var(--primary-color);
+  transform: translateY(-2px);
 }
 
 .userTypeButton.active {
-  background: #3498db;
-  color: white;
+  background: var(--primary-gradient);
+  color: var(--white);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
-.userTypeButton:not(.active):hover {
-  background: #f8f9fa;
+.userTypeButton.active::before {
+  opacity: 1;
 }
 
 .userTypeButton:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
-  opacity: 0.6;
+  transform: none;
 }
 
+/* Form Group */
 .formGroup {
-  margin-bottom: 1.5rem;
-  position: relative;
+  margin-bottom: var(--spacing-lg);
 }
 
 .formGroup label {
   display: block;
-  font-size: 14px;
-  font-weight: 600;
-  color: #2c3e50;
-  margin-bottom: 6px;
-  transition: color 0.3s ease;
+  margin-bottom: var(--spacing-sm);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  font-size: var(--font-sm);
+  transition: var(--transition-base);
 }
 
-/* Red label when error */
 .formGroup label.errorLabel {
-  color: #e74c3c;
+  color: var(--danger-color);
 }
 
-/* Field error message */
 .fieldError {
   display: block;
-  color: #e74c3c;
-  font-size: 12px;
-  margin-bottom: 4px;
-  font-weight: 500;
+  color: var(--danger-color);
+  font-size: var(--font-xs);
+  margin-top: var(--spacing-xs);
+  font-weight: var(--font-medium);
+  animation: slideInRight 0.3s ease;
 }
 
 .formGroup input {
   width: 100%;
-  padding: 1rem;
-  border: 2px solid #ecf0f1;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  box-sizing: border-box;
+  padding: 14px var(--spacing-md);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-base);
+  font-weight: var(--font-medium);
+  transition: var(--transition-base);
+  background: var(--white);
+  color: var(--text-primary);
 }
 
 .formGroup input:focus {
   outline: none;
-  border-color: #3498db;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-/* Error state input */
+.formGroup input::placeholder {
+  color: var(--text-muted);
+  font-weight: var(--font-normal);
+}
+
 .formGroup input.errorInput {
-  border-color: #e74c3c;
-  background-color: #fff5f5;
+  border-color: var(--danger-color);
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
 }
 
 .formGroup input.errorInput:focus {
-  border-color: #e74c3c;
-  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+  border-color: var(--danger-color);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
 }
 
 .formGroup input:disabled {
-  background-color: #f5f5f5;
+  background: var(--background-secondary);
   cursor: not-allowed;
+  opacity: 0.6;
 }
 
+/* Button */
 .btnPrimary {
   width: 100%;
-  padding: 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  padding: 16px;
+  background: var(--primary-gradient);
+  color: var(--white);
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: var(--radius-md);
+  font-size: var(--font-base);
+  font-weight: var(--font-bold);
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 1rem;
+  transition: var(--transition-smooth);
+  margin-top: var(--spacing-md);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.btnPrimary::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btnPrimary:hover:not(:disabled)::before {
+  width: 300px;
+  height: 300px;
 }
 
 .btnPrimary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: var(--shadow-lg);
+}
+
+.btnPrimary:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .btnPrimary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
 }
 
+/* Auth Link */
 .authLink {
   text-align: center;
-  margin-top: 1.5rem;
-  color: #7f8c8d;
-  font-size: 0.95rem;
+  margin-top: var(--spacing-lg);
+  color: var(--text-secondary);
+  font-size: var(--font-sm);
 }
 
 .authLink a {
-  color: #3498db;
+  color: var(--primary-color);
+  font-weight: var(--font-semibold);
   text-decoration: none;
-  font-weight: 600;
+  transition: var(--transition-base);
+  position: relative;
+}
+
+.authLink a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary-gradient);
+  transition: var(--transition-base);
+}
+
+.authLink a:hover::after {
+  width: 100%;
 }
 
 .authLink a:hover {
-  text-decoration: underline;
+  color: var(--primary-dark);
 }
 
-@media (max-width: 768px) {
+/* Responsive */
+@media (max-width: 480px) {
   .authCard {
-    padding: 1.5rem;
+    padding: var(--spacing-xl);
   }
 
   .authCard h2 {
-    font-size: 1.5rem;
+    font-size: var(--font-2xl);
   }
 
-  .userTypeButton {
-    font-size: 0.85rem;
-    padding: 0.75rem;
+  .userTypeSelector {
+    flex-direction: column;
   }
 }

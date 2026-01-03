@@ -5,13 +5,13 @@ import styles from '../Styles/Landing.module.css';
 const LandingPage = () => {
   return (
     <div className={styles.landing}>
-      <div className={styles.hero}>
-        <h1>👨‍💻 DevOnDeck</h1>
-        <p>
+      <div className={`${styles.hero} animate-content`}>
+        <h1 className="animate-header">👨‍💻 DevOnDeck</h1>
+        <p className="animate-content delay-200">
           La plateforme qui met en relation les meilleurs développeurs 
           avec les organisations qui ont besoin de leurs compétences
         </p>
-        <div className={styles.ctaButtons}>
+        <div className={`${styles.ctaButtons} animate-section delay-300`}>
           <Link to="/register" className={`${styles.btn} ${styles.btnPrimary}`}>
             Commencer maintenant
           </Link>

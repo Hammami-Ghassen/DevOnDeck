@@ -114,16 +114,16 @@ const Register = () => {
 
   return (
     <div className={styles.authContainer}>
-      <div className={styles.authCard}>
-        <h2>📝 Inscription</h2>
+      <div className={`${styles.authCard} animate-card`}>
+        <h2 className="animate-header">📝 Inscription</h2>
         
         {errors.general && (
-          <div className={styles.errorMessage}>
+          <div className={`${styles.errorMessage} animate-content`}>
             {errors.general}
           </div>
         )}
 
-        <div className={styles.userTypeSelector}>
+        <div className={`${styles.userTypeSelector} animate-content delay-100`}>
           <button 
             type="button"
             className={`${styles.userTypeButton} ${userType === 'developer' ? styles.active : ''}`}
@@ -142,7 +142,7 @@ const Register = () => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="animate-content delay-200">
           <div className={styles.formGroup}>
             <label className={errors.name ? styles.errorLabel : ''}>
               Nom complet
@@ -192,7 +192,7 @@ const Register = () => {
             )}
             <input
               type="password"
-              placeholder="Mot de passe (min. 6 caractères)"
+              placeholder="Mot de passe"
               value={formData.password}
               onChange={(e) => {
                 setFormData({...formData, password: e.target.value});
@@ -232,7 +232,7 @@ const Register = () => {
           </button>
         </form>
         
-        <p className={styles.authLink}>
+        <p className={`${styles.authLink} animate-content delay-300`}>
           Déjà un compte ? <Link to="/login">Se connecter</Link>
         </p>
       </div>
