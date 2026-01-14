@@ -13,8 +13,8 @@ const CreateOffer = () => {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        requiredSkills: '',
-        requiredFrameworks: '',
+        requiredSkills: [],
+        requiredFrameworks: [],
         preferredLocalisation: '',
         experienceLevel: '',
         contractType: '',
@@ -23,12 +23,63 @@ const CreateOffer = () => {
         status: 'active'
     });
 
+    const [skillInput, setSkillInput] = useState('');
+    const [frameworkInput, setFrameworkInput] = useState('');
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: value
         }));
+    };
+
+    const addSkill = () => {
+        if (skillInput.trim() && !formData.requiredSkills.includes(skillInput.trim())) {
+            setFormData(prev => ({
+                ...prev,
+                requiredSkills: [...prev.requiredSkills, skillInput.trim()]
+            }));
+            setSkillInput('');
+        }
+    };
+
+    const removeSkill = (skillToRemove) => {
+        setFormData(prev => ({
+            ...prev,
+            requiredSkills: prev.requiredSkills.filter(skill => skill !== skillToRemove)
+        }));
+    };
+
+    const addFramework = () => {
+        if (frameworkInput.trim() && !formData.requiredFrameworks.includes(frameworkInput.trim())) {
+            setFormData(prev => ({
+                ...prev,
+                requiredFrameworks: [...prev.requiredFrameworks, frameworkInput.trim()]
+            }));
+            setFrameworkInput('');
+        }
+    };
+
+    const removeFramework = (frameworkToRemove) => {
+        setFormData(prev => ({
+            ...prev,
+            requiredFrameworks: prev.requiredFrameworks.filter(fw => fw !== frameworkToRemove)
+        }));
+    };
+
+    const handleSkillKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addSkill();
+        }
+    };
+
+    const handleFrameworkKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addFramework();
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -42,12 +93,8 @@ const CreateOffer = () => {
             const offerData = {
                 title: formData.title,
                 description: formData.description,
-                requiredSkills: formData.requiredSkills 
-                    ? formData.requiredSkills.split(',').map(s => s.trim()).filter(s => s)
-                    : [],
-                requiredFrameworks: formData.requiredFrameworks
-                    ? formData.requiredFrameworks.split(',').map(s => s.trim()).filter(s => s)
-                    : [],
+                requiredSkills: formData.requiredSkills,
+                requiredFrameworks: formData.requiredFrameworks,
                 preferredLocalisation: formData.preferredLocalisation,
                 experienceLevel: formData.experienceLevel,
                 contractType: formData.contractType,
@@ -136,36 +183,88 @@ const CreateOffer = () => {
 
                         {/* Skills */}
                         <div className={styles.formGroup}>
-                            <label htmlFor="requiredSkills" className={styles.label}>
+                            <label className={styles.label}>
                                 Compétences requises
                             </label>
-                            <input
-                                type="text"
-                                id="requiredSkills"
-                                name="requiredSkills"
-                                value={formData.requiredSkills}
-                                onChange={handleChange}
-                                className={styles.input}
-                                placeholder="Ex: JavaScript, Python, SQL (séparés par des virgules)"
-                            />
-                            <small className={styles.hint}>Séparez les compétences par des virgules</small>
+                            <div className={styles.tagInputWrapper}>
+                                <input
+                                    type="text"
+                                    value={skillInput}
+                                    onChange={(e) => setSkillInput(e.target.value)}
+                                    onKeyPress={handleSkillKeyPress}
+                                    className={styles.tagInput}
+                                    placeholder="Ex: JavaScript, Python, SQL..."
+                                />
+                                <button
+                                    type="button"
+                                    onClick={addSkill}
+                                    className={styles.addButton}
+                                    disabled={!skillInput.trim()}
+                                >
+                                    <span className={styles.plusIcon}>+</span>
+                                </button>
+                            </div>
+                            {formData.requiredSkills.length > 0 && (
+                                <div className={styles.tagsContainer}>
+                                    {formData.requiredSkills.map((skill, index) => (
+                                        <span key={index} className={styles.tag}>
+                                            {skill}
+                                            <button
+                                                type="button"
+                                                onClick={() => removeSkill(skill)}
+                                                className={styles.removeTag}
+                                                aria-label="Supprimer"
+                                            >
+                                                ×
+                                            </button>
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
+                            <small className={styles.hint}>Appuyez sur Enter ou cliquez sur + pour ajouter</small>
                         </div>
 
                         {/* Frameworks */}
                         <div className={styles.formGroup}>
-                            <label htmlFor="requiredFrameworks" className={styles.label}>
+                            <label className={styles.label}>
                                 Frameworks/Technologies
                             </label>
-                            <input
-                                type="text"
-                                id="requiredFrameworks"
-                                name="requiredFrameworks"
-                                value={formData.requiredFrameworks}
-                                onChange={handleChange}
-                                className={styles.input}
-                                placeholder="Ex: React, Node.js, MongoDB (séparés par des virgules)"
-                            />
-                            <small className={styles.hint}>Séparez les frameworks par des virgules</small>
+                            <div className={styles.tagInputWrapper}>
+                                <input
+                                    type="text"
+                                    value={frameworkInput}
+                                    onChange={(e) => setFrameworkInput(e.target.value)}
+                                    onKeyPress={handleFrameworkKeyPress}
+                                    className={styles.tagInput}
+                                    placeholder="Ex: React, Node.js, MongoDB..."
+                                />
+                                <button
+                                    type="button"
+                                    onClick={addFramework}
+                                    className={styles.addButton}
+                                    disabled={!frameworkInput.trim()}
+                                >
+                                    <span className={styles.plusIcon}>+</span>
+                                </button>
+                            </div>
+                            {formData.requiredFrameworks.length > 0 && (
+                                <div className={styles.tagsContainer}>
+                                    {formData.requiredFrameworks.map((framework, index) => (
+                                        <span key={index} className={styles.tag}>
+                                            {framework}
+                                            <button
+                                                type="button"
+                                                onClick={() => removeFramework(framework)}
+                                                className={styles.removeTag}
+                                                aria-label="Supprimer"
+                                            >
+                                                ×
+                                            </button>
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
+                            <small className={styles.hint}>Appuyez sur Enter ou cliquez sur + pour ajouter</small>
                         </div>
 
                         {/* Two column layout */}

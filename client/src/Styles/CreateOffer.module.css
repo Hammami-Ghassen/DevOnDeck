@@ -132,6 +132,130 @@
     font-size: var(--font-sm);
     font-style: italic;
   }
+
+  /* Tag Input System */
+  .tagInputWrapper {
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: center;
+  }
+
+  .tagInput {
+    flex: 1;
+    padding: 14px var(--spacing-md);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: var(--font-base);
+    font-weight: var(--font-medium);
+    color: var(--text-primary);
+    font-family: inherit;
+    transition: var(--transition-base);
+    background: var(--white);
+  }
+
+  .tagInput:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+
+  .tagInput::placeholder {
+    color: var(--text-muted);
+  }
+
+  .addButton {
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: var(--radius-md);
+    background: var(--primary-gradient);
+    color: var(--white);
+    font-size: 24px;
+    font-weight: var(--font-bold);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .addButton:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-md);
+  }
+
+  .addButton:active:not(:disabled) {
+    transform: scale(0.95);
+  }
+
+  .addButton:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .plusIcon {
+    line-height: 1;
+  }
+
+  .tagsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: var(--background-secondary);
+    border-radius: var(--radius-md);
+    border: 2px dashed var(--border-color);
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: 8px 14px;
+    background: var(--primary-gradient);
+    color: var(--white);
+    border-radius: var(--radius-full);
+    font-size: var(--font-sm);
+    font-weight: var(--font-semibold);
+    box-shadow: var(--shadow-sm);
+    animation: fadeIn 0.3s ease;
+  }
+
+  .removeTag {
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--white);
+    border-radius: var(--radius-full);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    transition: var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .removeTag:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
   
   /* Buttons */
   .buttonGroup {
