@@ -54,7 +54,7 @@ const CreateOffer = () => {
     const removeSkill = (skillToRemove) => {
         setFormData(prev => ({                          //Mise à jour fonctionnelle avec accès à l'état précédent.
             ...prev,
-            requiredSkills: prev.requiredSkills.filter(skill => skill !== skillToRemove)
+            requiredSkills: prev.requiredSkills.filter(skill => skill !== skillToRemove)  //Condition : garder si différent
         }));
     };
 
@@ -64,24 +64,25 @@ const CreateOffer = () => {
         if (frameworkInput.trim() && !formData.requiredFrameworks.includes(frameworkInput.trim())) {    //Vérifie que l'input n'est pas vide.
             setFormData(prev => ({
                 ...prev,
-                requiredFrameworks: [...prev.requiredFrameworks, frameworkInput.trim()]
+                requiredFrameworks: [...prev.requiredFrameworks, frameworkInput.trim()]  //Ajoute le nouvel élément à la fin
             }));
             setFrameworkInput('');
         }
     };
 
-
+//Une fonction qui supprime un framework/technologie spécifique de la liste requiredFrameworks.
     const removeFramework = (frameworkToRemove) => {
-        setFormData(prev => ({
+        setFormData(prev => ({                      //Copie toutes les propriétés de formData précédent.
             ...prev,
-            requiredFrameworks: prev.requiredFrameworks.filter(fw => fw !== frameworkToRemove)
-        }));
+            requiredFrameworks: prev.requiredFrameworks.filter(fw => fw !== frameworkToRemove)      //Condition : garder si différent
+        }));                                                                          //filtre le tableau pour exclure le framework.
     };
 
 
+//Une fonction qui détecte la touche Entrée et ajoute automatiquement la compétence à la liste.
     const handleSkillKeyPress = (e) => {
         if (e.key === 'Enter') {
-            e.preventDefault();
+            e.preventDefault();         //Empêche le comportement par défaut de la touche Entrée.
             addSkill();
         }
     };
@@ -94,7 +95,7 @@ const CreateOffer = () => {
         }
     };
 
-
+//Une fonction qui gère la soumission du formulaire.
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -118,7 +119,7 @@ const CreateOffer = () => {
                 status: formData.status
             };
 
-            // Send to backend
+            // Envoi au backend
             const response = await axios.post('/organization/offers', offerData);
             
             setSuccess(true);
