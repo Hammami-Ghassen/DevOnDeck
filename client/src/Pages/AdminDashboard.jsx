@@ -32,14 +32,17 @@ const AdminDashboard = () => {
   const [editingDeveloper, setEditingDeveloper] = useState(null);
   const [deletingDeveloper, setDeletingDeveloper] = useState(null);
 
+  
+  //analyse les erreurs HTTP et prend des actions appropriées
+
   const handleError = useCallback((err, action = 'loading') => {
     console.error(`Error during ${action}:`, err);
 
-    if (err.response?.status === 401) {
+    if (err.response?.status === 401) {                         //Unauthorized
       localStorage.removeItem('accessToken');
       localStorage.removeItem('user');
       navigate('/login');
-    } else if (err.response?.status === 403) {
+    } else if (err.response?.status === 403) {                  //pas autorisé
       navigate('/forbidden');
     } else if (err.response?.status === 404) {
       setError(err.response?.data?.message || "Ressource non trouvée");
@@ -50,6 +53,8 @@ const AdminDashboard = () => {
     }
   }, [navigate]);
 
+
+  //charge automatiquement la liste des développeurs + organisations 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -57,8 +62,10 @@ const AdminDashboard = () => {
         setError(null);
         const users = await getUsers();
         
+        //sépare les développeurs et les organisations
         setDevelopers(users.filter(user => user.role === 'developer'));
         setOrganizations(users.filter(user => user.role === 'organization'));
+
       } catch (err) {
         handleError(err, 'fetching users');
       } finally {
@@ -69,21 +76,30 @@ const AdminDashboard = () => {
     fetchUsers();
   }, [handleError]);
 
+//Modifier un développeur
   const handleEditDeveloper = useCallback((developer) => {
-    setEditingDeveloper(developer);
+    setEditingDeveloper(developer);           //Met à jour l'état avec le développeur à modifier
   }, []);
 
+// supprimer un développeur
   const handleDeleteDeveloper = useCallback((developer) => {
     setDeletingDeveloper(developer);
   }, []);
 
+
+//sauvegarde les modifications d'un développeur 
   const handleSaveDeveloper = async (updates) => {
     try {
       setError(null);
-      await updateDeveloper(editingDeveloper._id, updates);
-      const users = await getUsers();
+
+      //Envoyer les modifications au serveur
+      await updateDeveloper(editingDeveloper._id, updates);             //Fonction définie en haut du fichier
+      const users = await getUsers();                                     //Évite les incohérences
+
+      //Filtrer et mettre à jour les développeurs et organisations
       setDevelopers(users.filter(user => user.role === 'developer'));
       setOrganizations(users.filter(user => user.role === 'organization'));
+
       setEditingDeveloper(null);
     } catch (err) {
       handleError(err, 'updating developer');
@@ -95,13 +111,17 @@ const AdminDashboard = () => {
       setError(null);
       await deleteDeveloper(deletingDeveloper._id);
       const users = await getUsers();
+
       setDevelopers(users.filter(user => user.role === 'developer'));
       setOrganizations(users.filter(user => user.role === 'organization'));
       setDeletingDeveloper(null);
+      
     } catch (err) {
       handleError(err, 'deleting developer');
     }
   };
+
+
 
   const handleLogout = async () => {
     try {

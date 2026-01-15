@@ -119,7 +119,9 @@ const CreateOffer = () => {
                 status: formData.status
             };
 
-            // Envoi au backend
+            
+            //requête HTTP POST
+            // Envoi au backend       
             const response = await axios.post('/organization/offers', offerData);
             
             setSuccess(true);

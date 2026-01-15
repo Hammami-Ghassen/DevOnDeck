@@ -1,3 +1,4 @@
+//envoie les données du formulaire au serveu
 import React, { useState, useEffect } from 'react';
 import axios from '../utils/axios';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -6,18 +7,22 @@ import Header from './Header';
 import styles from '../Styles/ApplicantsList.module.css';
 
 const ApplicantsList = () => {
-  const [applications, setApplications] = useState([]);
+  const [applications, setApplications] = useState([]);     //Tableau des candidatures
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { offerId } = useParams();
+  const { offerId } = useParams();                          //Récupère l'ID de l'offre depuis l'URL
   const navigate = useNavigate();
 
+
+
+//Chargement des candidats
+//S'exécute au montage ET quand offerId change
   useEffect(() => {
     const fetchApplicants = async () => {
       try {
         // Récupérer les applications avec les détails des développeurs
         const response = await axios.get(`/developers/offers/${offerId}`);
-        setApplications(response.data.applications || []);
+        setApplications(response.data.applications || []);      //Fonction asynchrone pour charger les candidats
         setLoading(false);
       } catch (error) {
         console.error('Erreur:', error);
@@ -26,10 +31,14 @@ const ApplicantsList = () => {
       }
     };
 
+
+//vérifie que offerId existe 
     if (offerId) {
       fetchApplicants();
     }
+
   }, [offerId]);
+
 
   // Fonction pour mettre à jour le statut localement après une action
   const handleStatusUpdate = (applicationId, newStatus) => {
@@ -41,6 +50,8 @@ const ApplicantsList = () => {
       )
     );
   };
+
+
 
   if (loading) {
     return (
