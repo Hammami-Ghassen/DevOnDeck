@@ -5,13 +5,15 @@
   margin: 0 auto;
   width: 100%;
   background-color: rgb(238, 238, 239);
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
 .dashboardHeader {
   margin-bottom: 30px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 20px;
 }
 
@@ -25,12 +27,10 @@
 .dashboardSubtitle {
   color: #7f8c8d;
   font-size: 16px;
+  margin: 0;
 }
 
 .logoutBtn {
-  margin-left: auto;
-  margin-right: 20px;
-  margin-top: 20px;
   padding: 12px 24px;
   background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
   color: white;
@@ -42,7 +42,6 @@
   transition: all 0.3s ease;
   white-space: nowrap;
   flex-shrink: 0;
-  display: block;
 }
 
 .logoutBtn:hover {
@@ -52,6 +51,181 @@
 
 .logoutBtn:active {
   transform: translateY(0);
+}
+
+.container {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.container h1 {
+  font-size: 28px;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+.section {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.section h2 {
+  font-size: 20px;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-weight: 600;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #eee;
+}
+
+/* Card Grid Layout */
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid #e9ecef;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.cardTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.cardEmail {
+  font-size: 14px;
+  color: #7f8c8d;
+  margin: 5px 0 0 0;
+}
+
+.cardActions {
+  display: flex;
+  gap: 8px;
+}
+
+.btnEdit,
+.btnDelete {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btnEdit {
+  background: #3498db;
+  color: white;
+}
+
+.btnEdit:hover {
+  background: #2980b9;
+}
+
+.btnDelete {
+  background: #e74c3c;
+  color: white;
+}
+
+.btnDelete:hover {
+  background: #c0392b;
+}
+
+.btnPrimary {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
+/* Loading & Error States */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 20px;
+}
+
+.loadingContainer p {
+  color: #7f8c8d;
+  font-size: 16px;
+  margin: 0;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e0e0e0;
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.errorContainer {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.errorIcon {
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+.errorContainer h3 {
+  color: #e74c3c;
+  margin-bottom: 10px;
+}
+
+.errorContainer p {
+  color: #7f8c8d;
+  margin-bottom: 20px;
 }
 
 .statsContainer {
@@ -102,13 +276,6 @@
   font-size: 14px;
 }
 
-.loading {
-  text-align: center;
-  padding: 60px;
-  font-size: 18px;
-  color: #7f8c8d;
-}
-
 .errorMessage {
   background-color: #fee;
   color: #c33;
@@ -117,6 +284,48 @@
   text-align: center;
   margin: 20px 0;
 }
+
+.emptyState {
+  text-align: center;
+  padding: 40px;
+  color: #7f8c8d;
+  font-size: 16px;
+}
+
+/* Developer Section */
+.devsection {
+  margin-bottom: 40px;
+}
+
+.devsection h2 {
+  font-size: 24px;
+  color: #2c3e50;
+  margin-bottom: 24px;
+  font-weight: 700;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #eee;
+}
+
+.devsection > div {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+}
+
+/* Organization Section */
+.orgsection {
+  margin-bottom: 40px;
+}
+
+.orgsection h2 {
+  font-size: 24px;
+  color: #2c3e50;
+  margin-bottom: 24px;
+  font-weight: 700;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #eee;
+}
+
 
 @media (max-width: 768px) {
   .dashboard {
@@ -134,5 +343,32 @@
 
   .logoutBtn {
     width: 100%;
+    text-align: center;
+  }
+
+  .container {
+    padding: 20px;
+  }
+
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cardActions {
+    width: 100%;
+  }
+
+  .cardActions button {
+    flex: 1;
+  }
+
+  .devsection > div,
+  .orgsection > div {
+    grid-template-columns: 1fr;
   }
 }

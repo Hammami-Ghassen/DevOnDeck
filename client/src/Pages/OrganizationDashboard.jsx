@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from '../utils/axios';
 import Header from '../components/Header';
 import styles from '../Styles/OrganizationDashboard.module.css';
+import DeleteConfirmModal from '../components/DeleteConfirmModal';
 
 // API functions
 
@@ -34,17 +35,16 @@ async function deleteOffer(offerId) {
 
 
 const OrganizationDashboard = () => {
-    const navigate = useNavigate();                                     // Hook de navigation
-    const [offers, setOffers] = useState([]);                       //offers:Liste des offres d'emploi
-    const [searches, setSearches] = useState([]);                   //searches:Liste des recherches de candidats    
-    const [loading, setLoading] = useState(true);                   //loading:Indicateur de chargement
-    const [error, setError] = useState(null);                       //error:Message d'erreur
-    const [notification, setNotification] = useState(null);         //notification:Message de notification
-    const [activeTab, setActiveTab] = useState('offers');           //onglet: 'offers' or 'searches'
-    const [searchQuery, setSearchQuery] = useState('');             // Texte de recherche saisi par l'utilisateur
-    const [searchHistory, setSearchHistory] = useState([]);         // Liste des 5 dernières recherches
-
-    
+    const navigate = useNavigate();
+    const [offers, setOffers] = useState([]);
+    const [searches, setSearches] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [notification, setNotification] = useState(null);
+    const [activeTab, setActiveTab] = useState('offers'); // 'offers' or 'searches'
+    const [searchQuery, setSearchQuery] = useState(''); // Search state
+    const [searchHistory, setSearchHistory] = useState([]); // Search history state
+    const [deletingOffer, setDeletingOffer] = useState(null);
 
     // Load history from localStorage on mount
     //charge l'historique de recherche
@@ -137,20 +137,23 @@ const OrganizationDashboard = () => {
         }
     };
 
-    
-//upprime une offre d'emploi et met à jour l'interface
-    const handleDeleteOffer = async (offerId) => {
-        if (!window.confirm('Êtes-vous sûr de vouloir supprimer cette offre ?')) {
-            return;
-        }
+
+    const handleDeleteOffer = (offer) => {
+        setDeletingOffer(offer);
+    };
+
+    const handleConfirmDeleteOffer = async () => {
+        if (!deletingOffer) return;
 
         try {
-            await deleteOffer(offerId);
-            setOffers((prev) => prev.filter((offer) => offer._id !== offerId));     //Fonction pour mettre à jour l'état
+            await deleteOffer(deletingOffer._id);
+            setOffers((prev) => prev.filter((offer) => offer._id !== deletingOffer._id));
             showNotification('✓ Offre supprimée avec succès !');
         } catch (err) {
             showNotification('✗ Erreur lors de la suppression', 'error');
             console.error('Erreur de suppression:', err);
+        } finally {
+            setDeletingOffer(null);
         }
     };
 
@@ -398,7 +401,7 @@ const OrganizationDashboard = () => {
                                 ) : (
                                     <div className={styles.offersGrid}>
                                         {filteredOffers.map((offer) => (
-                                            <div key={offer._id} className={styles.offerCard} onClick={()=>navigate(`/organization/applicants/${offer._id}`)}>
+                                            <div key={offer._id} className={styles.offerCard} onClick={() => navigate(`/organization/applicants/${offer._id}`)}>
                                                 <div className={styles.offerHeader}>
                                                     <h4>{offer.title}</h4>
                                                     {getStatusBadge(offer.status)}
@@ -456,7 +459,8 @@ const OrganizationDashboard = () => {
                                                         className={styles.deleteBtn}
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            handleDeleteOffer(offer._id)}}
+                                                            handleDeleteOffer(offer)
+                                                        }}
                                                     >
                                                         🗑️ Supprimer
                                                     </button>
@@ -504,6 +508,13 @@ const OrganizationDashboard = () => {
                 <div className={`notification ${notification.type}`}>
                     {notification.message}
                 </div>
+            )}
+            {deletingOffer && (
+                <DeleteConfirmModal
+                    developer={{ name: deletingOffer.title }}
+                    onConfirm={handleConfirmDeleteOffer}
+                    onClose={() => setDeletingOffer(null)}
+                />
             )}
         </div>
     );

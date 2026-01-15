@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../utils/axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import ApplicantCard from './ApplicantsCard';
-import Header from './Header';
+import ApplicantCard from '../components/ApplicantsCard';
+import Header from '../components/Header';
 import styles from '../Styles/ApplicantsList.module.css';
 
 const ApplicantsList = () => {

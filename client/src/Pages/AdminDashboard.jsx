@@ -18,7 +18,7 @@ async function updateDeveloper(id, updates) {
   return response.data;
 }
 
-async function deleteDeveloper(id) {
+async function deleteUser(id) {
   const response = await axios.delete(`/admin/developers/${id}`);
   return response.data;
 }
@@ -30,10 +30,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editingDeveloper, setEditingDeveloper] = useState(null);
-  const [deletingDeveloper, setDeletingDeveloper] = useState(null);
-
-  
-  //analyse les erreurs HTTP et prend des actions appropriées
+  const [deletingUser, setDeletingUser] = useState(null);
 
   const handleError = useCallback((err, action = 'loading') => {
     console.error(`Error during ${action}:`, err);
@@ -83,7 +80,11 @@ const AdminDashboard = () => {
 
 // supprimer un développeur
   const handleDeleteDeveloper = useCallback((developer) => {
-    setDeletingDeveloper(developer);
+    setDeletingUser({ ...developer, type: 'developer' });
+  }, []);
+
+  const handleDeleteOrganization = useCallback((organization) => {
+    setDeletingUser({ ...organization, type: 'organization' });
   }, []);
 
 
@@ -109,15 +110,14 @@ const AdminDashboard = () => {
   const handleConfirmDelete = async () => {
     try {
       setError(null);
-      await deleteDeveloper(deletingDeveloper._id);
+      await deleteUser(deletingUser._id);
       const users = await getUsers();
 
       setDevelopers(users.filter(user => user.role === 'developer'));
       setOrganizations(users.filter(user => user.role === 'organization'));
-      setDeletingDeveloper(null);
-      
+      setDeletingUser(null);
     } catch (err) {
-      handleError(err, 'deleting developer');
+      handleError(err, 'deleting user');
     }
   };
 
@@ -176,17 +176,14 @@ const AdminDashboard = () => {
   }
 
   return (
+    <>
+    <Header/>
     <div className={styles.dashboard}>
-      <Header />
-      <button onClick={handleLogout} className={styles.logoutBtn}>
-        Logout
-      </button>
-      
       <div className={styles.container}>
         <h1>Admin Dashboard</h1>
 
         {/* Developers Section */}
-        <div className={styles.section}>
+        <div className={styles.devsection}>
           <h2>Developers</h2>
           <DeveloperList
             developers={developers}
@@ -196,12 +193,12 @@ const AdminDashboard = () => {
         </div>
 
         {/* Organizations Section */}
-        <div className={styles.section}>
+        <div className={styles.orgsection}>
           <h2>Organizations</h2>
           <OrganizationList 
             organizations={organizations}
             onEdit={null}
-            onDelete={null}
+            onDelete={handleDeleteOrganization}
           />
         </div>
       </div>
@@ -214,14 +211,15 @@ const AdminDashboard = () => {
         />
       )}
 
-      {deletingDeveloper && (
+      {deletingUser && (
         <DeleteConfirmModal
-          developer={deletingDeveloper}
+          developer={deletingUser}
           onConfirm={handleConfirmDelete}
-          onClose={() => setDeletingDeveloper(null)}
+          onClose={() => setDeletingUser(null)}
         />
       )}
     </div>
+    </>
   );
 };
 

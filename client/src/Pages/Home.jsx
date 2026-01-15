@@ -15,7 +15,6 @@ const Home = () => {
     experienceLevel: ''
   });
 
-  const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
 
   useEffect(() => {
     fetchOffers();

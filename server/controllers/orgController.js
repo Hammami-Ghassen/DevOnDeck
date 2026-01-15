@@ -1,4 +1,5 @@
 import Offer from '../models/offerModel.js';
+import Application from '../models/applicationModel.js';
 
 export const getOrganizationOffers = async (req, res) => {
     try {
@@ -135,5 +136,40 @@ export const updateOffer = async (req, res) => {
     } catch (error) {
         console.error('Erreur mise à jour offre:', error);
         res.status(500).json({ message: 'Erreur serveur lors de la mise à jour' });
+    }
+};
+
+export const deleteOffer = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const organizationId = req.user._id;
+
+        // Find the offer
+        const offer = await Offer.findById(id);
+
+        if (!offer) {
+            return res.status(404).json({ message: 'Offre non trouvée' });
+        }
+
+        // Check if the user owns this offer
+        if (offer.organizationId.toString() !== organizationId.toString()) {
+            return res.status(403).json({ message: 'Non autorisé à supprimer cette offre' });
+        }
+
+        // Delete the offer
+        await Offer.findByIdAndDelete(id);
+
+        // Optionally: Delete related applications
+        await Application.deleteMany({ offerId: id });
+
+        res.status(200).json({ 
+            message: 'Offre supprimée avec succès' 
+        });
+    } catch (error) {
+        console.error('Delete offer error:', error);
+        res.status(500).json({ 
+            message: 'Erreur lors de la suppression de l\'offre',
+            error: error.message 
+        });
     }
 };

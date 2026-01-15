@@ -11,7 +11,7 @@ import Home from './Pages/Home.jsx';
 import CreateOffer from './Pages/CreateOffer.jsx';
 import OrganizationDashboard from "./Pages/OrganizationDashboard.jsx"
 import OfferDetails from './Pages/offerDetails.jsx';
-import ApplicantsList from './components/ApplicantsList.jsx'
+import ApplicantsList from './Pages/ApplicantsList.jsx'
 import EditOffer from './Pages/EditOffer';
 
 function App() {
