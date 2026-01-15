@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import DeveloperListOffer from './DeveloperListOffer';
+import ApplicantCard from './ApplicantsCard';
 import Header from './Header';
 import styles from '../Styles/ApplicantsList.module.css';
 
@@ -106,7 +106,7 @@ const ApplicantsList = () => {
               className={styles.developerCardWrapper}
               style={{ animationDelay: `${0.1 * (index % 6)}s` }}
             >
-              <DeveloperListOffer developer={developer} />
+              <ApplicantCard developer={developer} />
             </div>
           ))}
         </div>

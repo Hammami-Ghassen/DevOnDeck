@@ -1,7 +1,7 @@
 import React from 'react';
-import styles from '../Styles/DeveloperListOffer.module.css';
+import styles from '../Styles/ApplicantsCard.module.css';
 
-const DeveloperListOffer = ({ developer }) => {
+const ApplicantsCard = ({ developer }) => {
   return (
     <div className={styles.developerCard}>
       <div className={styles.developerInfo}>
@@ -71,4 +71,4 @@ const DeveloperListOffer = ({ developer }) => {
   );
 };
 
-export default DeveloperListOffer ;
+export default ApplicantsCard ;
