@@ -6,7 +6,7 @@ import connectDB from './config/db.js';
 import adminRoutes from './routes/adminRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
-import searchRoutes from './routes/searchRoutes.js';
+import searchRoutes from './routes/orgRoutes.js';
 import offerRoutes from './routes/offerRoutes.js';
 import applicationRoutes from './routes/applicationRoutes.js';
 import devRoutes from "./routes/devRoutes.js"

@@ -9,7 +9,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config();
+// Load .env from the project root
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
 const addOffers = async () => {
   try {
@@ -36,7 +37,7 @@ const addOffers = async () => {
     console.log(`✓ Found ${organizations.length} organization(s)`);
     
     // Map string IDs to actual ObjectIds (cycle through available orgs)
-    const uniqueOrgIds = [...new Set(offersData.offers.map(o => o.organizationId))];
+    const uniqueOrgIds = [...new Set(offersData.map(o => o.organizationId))];
     uniqueOrgIds.forEach((stringId, index) => {
       orgMapping[stringId] = organizations[index % organizations.length]._id;
     });
@@ -44,7 +45,7 @@ const addOffers = async () => {
     console.log('✓ Organization ID mapping created');
     
     // Transform offers with valid ObjectIds
-    const transformedOffers = offersData.offers.map(offer => ({
+    const transformedOffers = offersData.map(offer => ({
       ...offer,
       organizationId: orgMapping[offer.organizationId]
     }));

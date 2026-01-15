@@ -84,3 +84,56 @@ export const createOffer = async (req, res) => {
         });
     }
 };
+
+
+export const updateOffer = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const organizationId = req.user._id;
+
+        // Find the offer and verify ownership
+        const offer = await Offer.findById(id);
+
+        if (!offer) {
+            return res.status(404).json({ message: 'Offre non trouvée' });
+        }
+
+        // Check if the user owns this offer
+        if (offer.organizationId.toString() !== organizationId.toString()) {
+            return res.status(403).json({ message: 'Non autorisé à modifier cette offre' });
+        }
+
+        // Update fields
+        const {
+            title,
+            description,
+            requiredSkills,
+            requiredFrameworks,
+            preferredLocalisation,
+            experienceLevel,
+            contractType,
+            salary,
+            status
+        } = req.body;
+
+        offer.title = title || offer.title;
+        offer.description = description || offer.description;
+        offer.requiredSkills = requiredSkills || offer.requiredSkills;
+        offer.requiredFrameworks = requiredFrameworks || offer.requiredFrameworks;
+        offer.preferredLocalisation = preferredLocalisation || offer.preferredLocalisation;
+        offer.experienceLevel = experienceLevel || offer.experienceLevel;
+        offer.contractType = contractType || offer.contractType;
+        offer.salary = salary || offer.salary;
+        offer.status = status || offer.status;
+
+        const updatedOffer = await offer.save();
+
+        res.status(200).json({
+            message: 'Offre mise à jour avec succès',
+            offer: updatedOffer
+        });
+    } catch (error) {
+        console.error('Erreur mise à jour offre:', error);
+        res.status(500).json({ message: 'Erreur serveur lors de la mise à jour' });
+    }
+};

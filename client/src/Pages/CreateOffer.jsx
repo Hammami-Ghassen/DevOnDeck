@@ -330,7 +330,7 @@ const CreateOffer = () => {
                         <div className={styles.formRow}>
                             <div className={styles.formGroup}>
                                 <label htmlFor="salaryMin" className={styles.label}>
-                                    Salaire min (€/an)
+                                    Salaire min (TND/an)
                                 </label>
                                 <input
                                     type="number"
@@ -346,7 +346,7 @@ const CreateOffer = () => {
 
                             <div className={styles.formGroup}>
                                 <label htmlFor="salaryMax" className={styles.label}>
-                                    Salaire max (€/an)
+                                    Salaire max (TND/an)
                                 </label>
                                 <input
                                     type="number"
