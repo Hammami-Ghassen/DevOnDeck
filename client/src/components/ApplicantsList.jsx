@@ -12,21 +12,23 @@ const ApplicantsList = () => {
   const { offerId } = useParams();
   const navigate = useNavigate();
 
-  const fetchApplicants = async () => {
-    try {
-      // Récupérer les applications avec les détails des développeurs
-      const response = await axios.get(`/developers/offers/${offerId}`);
-      setApplications(response.data.applications || []);
-      setLoading(false);
-    } catch (error) {
-      console.error('Erreur:', error);
-      setError(error.message);
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchApplicants();
+    const fetchApplicants = async () => {
+      try {
+        // Récupérer les applications avec les détails des développeurs
+        const response = await axios.get(`/developers/offers/${offerId}`);
+        setApplications(response.data.applications || []);
+        setLoading(false);
+      } catch (error) {
+        console.error('Erreur:', error);
+        setError(error.message);
+        setLoading(false);
+      }
+    };
+
+    if (offerId) {
+      fetchApplicants();
+    }
   }, [offerId]);
 
   // Fonction pour mettre à jour le statut localement après une action
