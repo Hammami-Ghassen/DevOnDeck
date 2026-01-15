@@ -1,3 +1,4 @@
+//formulaire de création d'offre d'emploi pour les organisations.
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../utils/axios';
@@ -5,11 +6,11 @@ import Header from '../components/Header';
 import styles from '../Styles/CreateOffer.module.css';
 
 const CreateOffer = () => {
-    const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false);
-
+    const navigate = useNavigate();                     //Hook de navigation
+    const [loading, setLoading] = useState(false);      //Gère l'état de chargement pendant l'envoi du formulaire
+    const [error, setError] = useState(null);           //Stocke les messages d'erreur
+    const [success, setSuccess] = useState(false);      // Indique si la création a réussi
+//L'état du formulaire
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -23,9 +24,12 @@ const CreateOffer = () => {
         status: 'active'
     });
 
+//des états temporaires qui stockent le texte que l'utilisateur tape avant de l'ajouter à la liste finale.
     const [skillInput, setSkillInput] = useState('');
     const [frameworkInput, setFrameworkInput] = useState('');
 
+
+//Une fonction qui met à jour formData quand l'utilisateur tape dans un champ du formulaire.
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -34,9 +38,10 @@ const CreateOffer = () => {
         }));
     };
 
-    const addSkill = () => {
-        if (skillInput.trim() && !formData.requiredSkills.includes(skillInput.trim())) {
-            setFormData(prev => ({
+//Une fonction qui ajoute une compétence à la liste requiredSkills après validation.
+    const addSkill = () => {                                                               //Vérifie que la compétence n'est pas déjà dans la liste 
+        if (skillInput.trim() && !formData.requiredSkills.includes(skillInput.trim())) {  //Vérifie que l'input n'est pas vide.
+            setFormData(prev => ({                                            //Mise à jour fonctionnelle avec accès à l'état précéden
                 ...prev,
                 requiredSkills: [...prev.requiredSkills, skillInput.trim()]
             }));
@@ -44,15 +49,19 @@ const CreateOffer = () => {
         }
     };
 
+
+//Une fonction qui supprime une compétence spécifique de la liste requiredSkills.
     const removeSkill = (skillToRemove) => {
-        setFormData(prev => ({
+        setFormData(prev => ({                          //Mise à jour fonctionnelle avec accès à l'état précédent.
             ...prev,
             requiredSkills: prev.requiredSkills.filter(skill => skill !== skillToRemove)
         }));
     };
 
-    const addFramework = () => {
-        if (frameworkInput.trim() && !formData.requiredFrameworks.includes(frameworkInput.trim())) {
+
+//Une fonction qui ajoute un framework/technologie à la liste
+    const addFramework = () => {                                                                        //Vérifie que le framework n'est pas déjà dans la liste
+        if (frameworkInput.trim() && !formData.requiredFrameworks.includes(frameworkInput.trim())) {    //Vérifie que l'input n'est pas vide.
             setFormData(prev => ({
                 ...prev,
                 requiredFrameworks: [...prev.requiredFrameworks, frameworkInput.trim()]
@@ -61,12 +70,14 @@ const CreateOffer = () => {
         }
     };
 
+
     const removeFramework = (frameworkToRemove) => {
         setFormData(prev => ({
             ...prev,
             requiredFrameworks: prev.requiredFrameworks.filter(fw => fw !== frameworkToRemove)
         }));
     };
+
 
     const handleSkillKeyPress = (e) => {
         if (e.key === 'Enter') {
@@ -75,12 +86,14 @@ const CreateOffer = () => {
         }
     };
 
+
     const handleFrameworkKeyPress = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
             addFramework();
         }
     };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -122,6 +135,8 @@ const CreateOffer = () => {
             setLoading(false);
         }
     };
+
+
 
     return (
         <div className={styles.createOfferPage}>

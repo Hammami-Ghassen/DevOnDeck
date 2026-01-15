@@ -5,57 +5,69 @@ import Header from '../components/Header';
 import styles from '../Styles/OrganizationDashboard.module.css';
 
 // API functions
-async function getOrganizationOffers(query = '') {
-    const response = await axios.get('/organization/offers', {
+
+//requette GET
+//Récupérer les offres d'une organisation depuis backend (axios)
+
+
+async function getOrganizationOffers(query = '') {                  //Paramètre par défaut si aucun query n'est passé
+    const response = await axios.get('/organization/offers', {      // Requête HTTP avec Axios
         params: { q: query }
     });
-    return response.data;
+    return response.data;                                           // Les vraies données sont dans response.data
 }
 
-// ... (other API functions unchanged)
+//Récupérer les recherches de candidats (axios)
 
 async function getCandidateSearches() {
-    const response = await axios.get('/organization/searches');
+    const response = await axios.get('/organization/searches');     //Envoie une requête GET au backend
     return response.data;
 }
 
+//Supprimer une offre
+//requette DELETE
 async function deleteOffer(offerId) {
-    const response = await axios.delete(`/organization/offers/${offerId}`);
+    const response = await axios.delete(`/organization/offers/${offerId}`);     //Envoie une requête DELETE au backend
     return response.data;
 }
+
+
 
 const OrganizationDashboard = () => {
-    const navigate = useNavigate();
-    const [offers, setOffers] = useState([]);
-    const [searches, setSearches] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [notification, setNotification] = useState(null);
-    const [activeTab, setActiveTab] = useState('offers'); // 'offers' or 'searches'
-    const [searchQuery, setSearchQuery] = useState(''); // Search state
-    const [searchHistory, setSearchHistory] = useState([]); // Search history state
+    const navigate = useNavigate();                                     // Hook de navigation
+    const [offers, setOffers] = useState([]);                       //offers:Liste des offres d'emploi
+    const [searches, setSearches] = useState([]);                   //searches:Liste des recherches de candidats    
+    const [loading, setLoading] = useState(true);                   //loading:Indicateur de chargement
+    const [error, setError] = useState(null);                       //error:Message d'erreur
+    const [notification, setNotification] = useState(null);         //notification:Message de notification
+    const [activeTab, setActiveTab] = useState('offers');           //onglet: 'offers' or 'searches'
+    const [searchQuery, setSearchQuery] = useState('');             // Texte de recherche saisi par l'utilisateur
+    const [searchHistory, setSearchHistory] = useState([]);         // Liste des 5 dernières recherches
+
+    
 
     // Load history from localStorage on mount
+    //charge l'historique de recherche
     useEffect(() => {
         const savedHistory = localStorage.getItem('searchHistory');
-        if (savedHistory) {
+        if (savedHistory) {                                           //true → Exécute le code (GetItem a retourné quelque chose)
             setSearchHistory(JSON.parse(savedHistory));
         }
     }, []);
 
-    // Save history to localStorage whenever it changes
+
+
+//sauvegarde automatiquement l'historique de recherche
     useEffect(() => {
-        localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+        localStorage.setItem('searchHistory', JSON.stringify(searchHistory));       //'clé', 'valeur'
     }, [searchHistory]);
 
-    const loadDashboardData = useCallback(async (query = '') => {
-        try {
-            // Only set loading on initial load or manual refresh, not every keystroke if we want smoother UI
-            // But for now, let's keep it simple.
-            // setLoading(true); 
 
-            // We fetch both for now, but in reality we could just fetch offers if query changes
-            const [offersData, searchesData] = await Promise.all([
+// charge toutes les données du dashboard depuis le backend (offre+search)
+    const loadDashboardData = useCallback(async (query = '') => {                   //Hook qui mémorise la fonction pour éviter de la recréer
+        try {
+            const [offersData, searchesData] = await Promise.all([                  //Exécute plusieurs requêtes en parallèle
+                //depuis le backend on a:
                 getOrganizationOffers(query),
                 getCandidateSearches()
             ]);
@@ -70,19 +82,24 @@ const OrganizationDashboard = () => {
         }
     }, [navigate]);
 
-    // Initial load
-    useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
-        const accessToken = localStorage.getItem('accessToken');
 
-        if (accessToken && user._id) {
-            setLoading(true); // Explicit loading for first mount
-            loadDashboardData();
+
+    // Initial load
+    // vérifie l'authentification de l'utilisateur et charge les données du dashboard
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');   //Récupère l'utilisateur sauvegardé  //Convertit le texte en objet JavaScript
+        const accessToken = localStorage.getItem('accessToken');        //Récupère le token d'authentification
+
+        if (accessToken && user._id) {                                  //Les DEUX conditions doivent être vraies
+            setLoading(true); 
+            loadDashboardData();                                        //Charge les offres et recherches depuis l'API
         } else {
             setLoading(false);
         }
     }, [navigate, loadDashboardData]);
 
+
+    //recherche avec délai
     // Debounced search effect
     useEffect(() => {
         const timerId = setTimeout(() => {
@@ -95,6 +112,8 @@ const OrganizationDashboard = () => {
         return () => clearTimeout(timerId);
     }, [searchQuery, activeTab, loadDashboardData]);
 
+
+//Affiche un message de succès ou d'erreur pendant 3 secondes
     const showNotification = (message, type = 'success') => {
         setNotification({ message, type });
         setTimeout(() => {
@@ -102,12 +121,14 @@ const OrganizationDashboard = () => {
         }, 3000);
     };
 
+
+//Déconnecte l'utilisateur en nettoyant le token et les données
     const handleLogout = async () => {
         try {
             await axios.post('/auth/logout');
             localStorage.removeItem('accessToken');
             localStorage.removeItem('user');
-            navigate('/login');
+            navigate('/login');                                 //edirige vers /login
         } catch (err) {
             console.error('Logout error:', err);
             localStorage.removeItem('accessToken');
@@ -116,6 +137,8 @@ const OrganizationDashboard = () => {
         }
     };
 
+    
+//upprime une offre d'emploi et met à jour l'interface
     const handleDeleteOffer = async (offerId) => {
         if (!window.confirm('Êtes-vous sûr de vouloir supprimer cette offre ?')) {
             return;
@@ -123,7 +146,7 @@ const OrganizationDashboard = () => {
 
         try {
             await deleteOffer(offerId);
-            setOffers((prev) => prev.filter((offer) => offer._id !== offerId));
+            setOffers((prev) => prev.filter((offer) => offer._id !== offerId));     //Fonction pour mettre à jour l'état
             showNotification('✓ Offre supprimée avec succès !');
         } catch (err) {
             showNotification('✗ Erreur lors de la suppression', 'error');
@@ -131,13 +154,17 @@ const OrganizationDashboard = () => {
         }
     };
 
+// redirige l'utilisateur vers la page de 'création' puis 'modification' d'une nouvelle offre d'emploi.
     const handleCreateOffer = () => {
         navigate('/organization/create-offer');
     };
 
+
     const handleEditOffer = (offerId) => {
         navigate(`/organization/edit-offer/${offerId}`);
     };
+
+
 
     const getStatusBadge = (status) => {
         const badges = {
@@ -161,6 +188,7 @@ const OrganizationDashboard = () => {
     };
 
     // History Management
+    // ajoute le terme de recherche à l'historique
     const handleSearchKeyDown = (e) => {
         if (e.key === 'Enter' && searchQuery.trim()) {
             const newItem = searchQuery.trim();
@@ -168,39 +196,40 @@ const OrganizationDashboard = () => {
                 const filtered = prev.filter(item => item !== newItem);
                 return [newItem, ...filtered].slice(0, 5); // Keep last 5 unique items
             });
-            // Search is already triggered by useEffect on searchQuery change
         }
     };
 
-    const handleHistoryClick = (term) => {
-        setSearchQuery(term);
+//remplit automatiquement la barre de recherche quand l'utilisateur clique sur un terme de l'historique.
+    const handleHistoryClick = (term) => {          //terme de recherche cliqué
+        setSearchQuery(term);                          //pour mettre à jour l'état 
     };
 
-    const handleDeleteHistoryItem = (e, term) => {
+
+//supprime un terme spécifique de l'historique de recherche
+    const handleDeleteHistoryItem = (e, term) => {          //Objet événement du clic sur le bouton ×
         e.stopPropagation();
         setSearchHistory(prev => prev.filter(item => item !== term));
     };
 
+
+//Supprime UN terme spécifique de l'historique quand l'utilisateur clique sur le bouton × 
     const handleClearHistory = () => {
         setSearchHistory([]);
     };
 
-    // Use offers directly as they are now filtered by backend
+//préparent les données filtrées pour l'affichage 
+// Use offers directly as they are now filtered by backend
     const filteredOffers = offers;
 
-    // Filter searches based on search query (keep client-side for now or implement backend too?)
-    // Request asked to work on offerModel/backend. Keeping searches client-side or filtered?
-    // Let's keep existing logic for "Searches" tab client-side if the API doesn't support it yet
-    // But `filteredSearches` was previously filtering `searches`.
-
-    const filteredSearches = searches.filter(search => {
-        if (!searchQuery.trim()) return true;
-        const query = searchQuery.toLowerCase();
+    const filteredSearches = searches.filter(search => {        //Crée un nouveau tableau contenant uniquement les recherches qui satisfont la condition.
+        if (!searchQuery.trim()) return true;                   //Si la barre de recherche est vide, garde toutes les recherches.
+        const query = searchQuery.toLowerCase();                //Convertit la recherche en minuscules
         return (
             search.searchName?.toLowerCase().includes(query) ||
             search.criteria?.toLowerCase().includes(query)
         );
     });
+
 
     return (
         <div className="app-container">

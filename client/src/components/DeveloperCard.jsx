@@ -18,9 +18,13 @@ const DeveloperCard = ({ developer, onEdit, onDelete }) => {
         </div>
       </div>
 
+
+
       <div className={styles.developerBio}>
         {developer.bio || 'Aucune biographie disponible'}
       </div>
+
+
 
       <div className={styles.skillsSection}>
         <p className={styles.sectionTitle}>💻 Compétences</p>
@@ -33,6 +37,8 @@ const DeveloperCard = ({ developer, onEdit, onDelete }) => {
         </div>
       </div>
 
+
+
       <div className={styles.frameworksSection}>
         <p className={styles.sectionTitle}>🔧 Frameworks & Librairies</p>
         <div className={styles.frameworksList}>
@@ -43,6 +49,8 @@ const DeveloperCard = ({ developer, onEdit, onDelete }) => {
           ))}
         </div>
       </div>
+
+      
 
       <div className={styles.cardActions}>
         <button 

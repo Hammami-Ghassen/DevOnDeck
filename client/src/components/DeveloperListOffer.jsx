@@ -1,5 +1,7 @@
+//affiche une carte de développeur avec toutes ses informations professionnelles.
 import React from 'react';
 import styles from '../Styles/DeveloperListOffer.module.css';
+
 
 const DeveloperListOffer = ({ developer }) => {
   return (
@@ -8,9 +10,12 @@ const DeveloperListOffer = ({ developer }) => {
         <h3>{developer.name}</h3>
       </div>
 
+
+
       <div className={styles.developerBio}>
         {developer.bio || 'Aucune biographie disponible'}
       </div>
+
 
       <div className={styles.skillsSection}>
         <p className={styles.sectionTitle}>💻 Compétences</p>
@@ -27,6 +32,8 @@ const DeveloperListOffer = ({ developer }) => {
         </div>
       </div>
 
+
+
       <div className={styles.frameworksSection}>
         <p className={styles.sectionTitle}>🔧 Frameworks & Librairies</p>
         <div className={styles.frameworksList}>
@@ -42,12 +49,15 @@ const DeveloperListOffer = ({ developer }) => {
         </div>
       </div>
 
+
+
       <div className={styles.locationSection}>
         <p className={styles.sectionTitle}>📍 Localisation</p>
         <p className={styles.locationText}>
           {developer.localisation || 'Non spécifiée'}
         </p>
       </div>
+
 
       <div className={styles.contactSection}>
         <p className={styles.sectionTitle}>📞 Contact</p>
