@@ -243,14 +243,6 @@ const OrganizationDashboard = () => {
                             Gérez vos offres d'emploi et recherchez des candidats qualifiés
                         </p>
                     </div>
-
-                    <button
-                        onClick={handleLogout}
-                        className={styles.logoutBtn}
-                        title="Déconnexion"
-                    >
-                        🚪 Déconnexion
-                    </button>
                 </div>
 
                 {/* Statistics Cards */}
@@ -453,13 +445,18 @@ const OrganizationDashboard = () => {
                                                 <div className={styles.offerActions}>
                                                     <button
                                                         className={styles.editBtn}
-                                                        onClick={() => handleEditOffer(offer._id)}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleEditOffer(offer._id)
+                                                        }}
                                                     >
                                                         ✏️ Modifier
                                                     </button>
                                                     <button
                                                         className={styles.deleteBtn}
-                                                        onClick={() => handleDeleteOffer(offer._id)}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleDeleteOffer(offer._id)}}
                                                     >
                                                         🗑️ Supprimer
                                                     </button>

@@ -12,6 +12,7 @@ import CreateOffer from './Pages/CreateOffer.jsx';
 import OrganizationDashboard from "./Pages/OrganizationDashboard.jsx"
 import OfferDetails from './Pages/offerDetails.jsx';
 import ApplicantsList from './components/ApplicantsList.jsx'
+import EditOffer from './Pages/EditOffer';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/organization/create-offer" element={<CreateOffer />} />
         <Route path="/organization/dashboard" element={<OrganizationDashboard />} />
         <Route path="/organization/applicants/:offerId" element={<ApplicantsList />} />
+        <Route path="/organization/edit-offer/:id" element={<EditOffer />} />
         
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/home" />} />

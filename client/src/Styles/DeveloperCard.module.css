@@ -157,6 +157,7 @@
 .btnDelete {
   background: var(--danger-gradient);
   color: var(--white);
+
 }
 
 .btnDelete:hover {
