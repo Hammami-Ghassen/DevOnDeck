@@ -1,41 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from '../utils/axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import ApplicantCard from './ApplicantsCard';
 import Header from './Header';
 import styles from '../Styles/ApplicantsList.module.css';
 
 const ApplicantsList = () => {
-  const [developers, setDevelopers] = useState([]);
+  const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { offerId } = useParams();
   const navigate = useNavigate();
 
+  const fetchApplicants = async () => {
+    try {
+      // Récupérer les applications avec les détails des développeurs
+      const response = await axios.get(`/developers/offers/${offerId}`);
+      setApplications(response.data.applications || []);
+      setLoading(false);
+    } catch (error) {
+      console.error('Erreur:', error);
+      setError(error.message);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchApplicants = async () => {
-      try {
-        // 1. Récupérer les IDs des candidats de l'offre
-        const response = await axios.get(`http://localhost:5000/developers/offers/${offerId}`);
-        const applicantIds = response.data.applicants;
-
-        // 2. Pour chaque ID, récupérer les détails du développeur
-        const developerPromises = applicantIds.map(id =>
-          axios.get(`http://localhost:5000/users/${id}`)
-        );
-        
-        const developersData = await Promise.all(developerPromises);
-        setDevelopers(developersData.map(res => res.data));
-        setLoading(false);
-      } catch (error) {
-        console.error('Erreur:', error);
-        setError(error.message);
-        setLoading(false);
-      }
-    };
-
     fetchApplicants();
   }, [offerId]);
+
+  // Fonction pour mettre à jour le statut localement après une action
+  const handleStatusUpdate = (applicationId, newStatus) => {
+    setApplications(prevApps => 
+      prevApps.map(app => 
+        app._id === applicationId 
+          ? { ...app, status: newStatus }
+          : app
+      )
+    );
+  };
 
   if (loading) {
     return (
@@ -64,7 +67,7 @@ const ApplicantsList = () => {
     );
   }
 
-  if (developers.length === 0) {
+  if (applications.length === 0) {
     return (
       <>
         <Header />
@@ -94,19 +97,24 @@ const ApplicantsList = () => {
         <div className={styles.statsCard}>
           <div className={styles.statIcon}>👥</div>
           <div className={styles.statInfo}>
-            <h3>{developers.length}</h3>
-            <p>Candidat{developers.length > 1 ? 's' : ''} postulé{developers.length > 1 ? 's' : ''}</p>
+            <h3>{applications.length}</h3>
+            <p>Candidat{applications.length > 1 ? 's' : ''} postulé{applications.length > 1 ? 's' : ''}</p>
           </div>
         </div>
 
         <div className={styles.developersList}>
-          {developers.map((developer, index) => (
+          {applications.map((application, index) => (
             <div 
-              key={developer._id} 
+              key={application._id} 
               className={styles.developerCardWrapper}
               style={{ animationDelay: `${0.1 * (index % 6)}s` }}
             >
-              <ApplicantCard developer={developer} />
+              <ApplicantCard 
+                developer={application.developerId} 
+                offerId={offerId}
+                application={application}
+                onStatusUpdate={handleStatusUpdate}
+              />
             </div>
           ))}
         </div>
