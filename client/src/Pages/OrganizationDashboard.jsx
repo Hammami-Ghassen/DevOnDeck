@@ -197,7 +197,7 @@ const OrganizationDashboard = () => {
             const newItem = searchQuery.trim();
             setSearchHistory(prev => {
                 const filtered = prev.filter(item => item !== newItem);
-                return [newItem, ...filtered].slice(0, 5); // Keep last 5 unique items
+                return [newItem, ...filtered].slice(0, 5); // Keep last 5 unique items    
             });
         }
     };
